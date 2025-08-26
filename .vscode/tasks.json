@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build SierraChart DLL (Release)",
+      "type": "shell",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\.vscode\\build_sierra_release.ps1",
+        "-SourceFile",
+        "${file}",
+        "-VCVarsPath",
+        "${config:VCVarsPath}"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build SierraChart DLL (Debug)",
+      "type": "shell",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\.vscode\\build_sierra_debug.ps1",
+        "-SourceFile",
+        "${file}",
+        "-VCVarsPath",
+        "${config:VCVarsPath}"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}

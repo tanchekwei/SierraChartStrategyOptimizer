@@ -1,0 +1,32 @@
+{
+    "customStudyFileAndFunctionName": "MyTradingStrategy.scsf_MyTradingStrategy",
+    "customStudyShortName": "MyStrategy",
+    "openResultsFolder": true,
+    "replayConfig": {
+        "replaySpeed": 480,
+        "startDate": "2024-01-01",
+        "startTime": "00:00:00.000",
+        "replayMode": 2,
+        "chartsToReplay": 0,
+        "clearExistingTradeSimulationDataForSymbolAndTradeAccount": 1
+    },
+    "logConfig": {
+        "enableLog": true,
+        "enableShowLogOnChart": true,
+        "maxLogLines": 25
+    },
+    "paramConfigs": [
+        {
+            "index": 5,
+            "min": 10,
+            "max": 20,
+            "increment": 2
+        },
+        {
+            "index": 6,
+            "min": 5,
+            "max": 15,
+            "increment": 5
+        }
+    ]
+}
