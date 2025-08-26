@@ -18,6 +18,8 @@ After all combinations have been tested, the optimizer generated JSON files and 
 
 The "Reset" button allows you to clear the current state.
 
+<video controls src="images/2025-08-27 05-33-51-1.mp4" title=""></video>
+
 ## Quick Start Guide
 
 ### Prerequisites
