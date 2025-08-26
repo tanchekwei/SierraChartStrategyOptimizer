@@ -103,7 +103,5 @@ namespace StrategyOptimizerHelpers
             delete logMessages;
             sc.SetPersistentPointer(PersistentVars::LogMessagesPtr, nullptr);
         }
-
-        OnChartLogging::AddLog(sc, "Strategy Optimizer has been reset.");
     }
 }
