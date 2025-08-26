@@ -92,8 +92,6 @@ namespace ReplayManager
         SetStudyInputs(sc, studyID, currentCombo, config.ParamConfigs);
         InitiateReplay(sc, config.ReplayConfig);
 
-        sc.RecalculateChart(sc.ChartNumber);
-
         replayState = ReplayState::WaitingForReplayToStart;
         OnChartLogging::AddLog(sc, "State changed: Waiting for replay data to load.");
     }
