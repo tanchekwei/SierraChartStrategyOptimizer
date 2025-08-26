@@ -24,9 +24,9 @@ bool HandleReplayLogic(SCStudyInterfaceRef sc);
 void HandleMenuEvents(SCStudyInterfaceRef sc);
 void HandleReplayCompletion(SCStudyInterfaceRef sc);
 
-SCDLLName("scsf_StrategyOptimizer")
+SCDLLName("scsf_StrategyOptimizer");
 
-    SCSFExport scsf_StrategyOptimizer(SCStudyInterfaceRef sc)
+SCSFExport scsf_StrategyOptimizer(SCStudyInterfaceRef sc)
 {
     InitializePersistentPointers(sc);
 
@@ -227,7 +227,14 @@ void HandleMenuEvents(SCStudyInterfaceRef sc)
 
     if (sc.MenuEventID == Input_Start.GetInt())
     {
-        StrategyOptimizerHelpers::HandleStartEvent(sc, Input_ConfigFilePath, config, combinations, replayState, comboIndex);
+        if (sc.GlobalTradeSimulationIsOn)
+        {
+            StrategyOptimizerHelpers::HandleStartEvent(sc, Input_ConfigFilePath, config, combinations, replayState, comboIndex);
+        }
+        else
+        {
+            OnChartLogging::AddLog(sc, "Trade Simulation Mode is off.");
+        }
         ReplayManager::ResetButton(sc, Input_Start);
     }
     else if (sc.MenuEventID == Input_Reset.GetInt())
