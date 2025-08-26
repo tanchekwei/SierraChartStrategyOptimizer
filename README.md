@@ -209,12 +209,12 @@ The optimizer supports `Integer`, `Float`, and `Boolean (Yes/No)` input types.
 ### Float
 ```json
 {
-    "type": "float",
-    "index": 6,      // In: 7 -> index: 6
-    "min": 20,
-    "max": 60,
-    "increment": 20
-},
+   "type": "float",
+   "index": 6,
+   "min": 1,
+   "max": 2,
+   "increment": 0.5
+}
 ```
 
 ### Boolean / Yes/No
