@@ -81,7 +81,16 @@ namespace
                 {
                     throw std::runtime_error("A 'paramConfigs' entry is missing a required field (index, min, max, or increment).");
                 }
-                outConfig.ParamConfigs.push_back({input["index"].get<int>(), input["min"].get<int>(), input["max"].get<int>(), input["increment"].get<int>()});
+
+                InputType type = InputType::INT; // Default to INT
+                if (input.contains("type"))
+                {
+                    std::string typeStr = input["type"].get<std::string>();
+                    if (typeStr == "float") type = InputType::FLOAT;
+                    else if (typeStr == "bool") type = InputType::BOOL;
+                }
+
+                outConfig.ParamConfigs.push_back({input["index"].get<int>(), input["min"].get<double>(), input["max"].get<double>(), input["increment"].get<double>(), type});
             }
         }
         else

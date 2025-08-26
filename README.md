@@ -79,17 +79,26 @@ Here is an example of a configuration file.
     },
     "paramConfigs": [
         {
+            "type": "int",
             "index": 5,
             "min": 1,
             "max": 2,
             "increment": 1
         },
         {
+            "type": "float",
             "index": 6,
             "min": 1,
             "max": 2,
+            "increment": 0.5
+        },
+        {
+            "type": "bool",
+            "index": 9,
+            "min": 0,
+            "max": 1,
             "increment": 1
-        }
+        },
     ]
 }
 ```
@@ -122,22 +131,31 @@ To find the correct `index` for an input:
     
     `index = X - 1`
 
-For example, to test different combinations of `Profit Target (In: 4)` and `Stop Loss (In: 7)`, your `paramConfigs` array would have two objects:
+For example, to test different combinations of `Profit Target (In: 4)`, `ATR Multipler (In: 7)`, `Enable Short (In: 10), your `paramConfigs` array would have three objects:
 
 ```json
 "paramConfigs": [
     {
-        "index": 3,      // In: 4 -> index: 3
+        "type": "int",
+        "index": 0,
         "min": 10,
         "max": 50,
         "increment": 10
     },
     {
-        "index": 6,      // In: 7 -> index: 6
-        "min": 20,
-        "max": 60,
-        "increment": 20
-    }
+        "type": "float",
+        "index": 0,
+        "min": 1,
+        "max": 2,
+        "increment": 0.5
+    },
+    {
+        "type": "bool",
+        "index": 0,
+        "min": 0,
+        "max": 1,
+        "increment": 1
+    },
 ]
 ```
 
@@ -165,10 +183,10 @@ The `summary.csv` file provides a high-level overview of all the backtest runs, 
 
 The optimizer supports `Integer`, `Float`, and `Boolean (Yes/No)` input types.
 
-### Integer (`SC_INT`)
-For whole number inputs, provide integer values for `min`, `max`, and `increment`.
+### Integer
 ```json
 {
+    "type": "int",
     "index": 0,
     "min": 10,
     "max": 100,
@@ -176,12 +194,22 @@ For whole number inputs, provide integer values for `min`, `max`, and `increment
 }
 ```
 
-### Float (`SC_FLOAT`), not supported yet
+### Float
+```json
+{
+    "type": "float",
+    "index": 6,      // In: 7 -> index: 6
+    "min": 20,
+    "max": 60,
+    "increment": 20
+},
+```
 
-### Boolean / Yes/No (`SC_YESNO`)
+### Boolean / Yes/No
 To test both "Yes" and "No" options, use a `min` of `0` (No) and a `max` of `1` (Yes).
 ```json
 {
+    "type": "bool",
     "index": 2,
     "min": 0,
     "max": 1,

@@ -14,8 +14,8 @@ namespace ReplayManager
     void StartReplayForCombination(
         SCStudyInterfaceRef sc,
         const StrategyOptimizerConfig& config,
-        const std::vector<std::vector<int>>& combinations,
+        const std::vector<std::vector<double>>& combinations,
         int comboIndex,
         ReplayState& replayState
-    );
+);
 }

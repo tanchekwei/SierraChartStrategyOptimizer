@@ -9,8 +9,8 @@ namespace CombinationGenerator
 {
     void GenerateCombinations(
         size_t k,
-        std::vector<std::vector<int>> &combinations,
-        std::vector<int> &current_combination,
+        std::vector<std::vector<double>> &combinations,
+        std::vector<double> &current_combination,
         const std::vector<InputConfig> &params)
     {
         if (k == params.size())
@@ -19,7 +19,7 @@ namespace CombinationGenerator
             return;
         }
 
-        for (int i = params[k].MinValue; i <= params[k].MaxValue; i += params[k].Increment)
+        for (double i = params[k].MinValue; i <= params[k].MaxValue; i += params[k].Increment)
         {
             current_combination.push_back(i);
 
@@ -28,10 +28,10 @@ namespace CombinationGenerator
         }
     }
 
-    std::vector<std::vector<int>> Generate(const std::vector<InputConfig> &params)
+    std::vector<std::vector<double>> Generate(const std::vector<InputConfig> &params)
     {
-        std::vector<std::vector<int>> combinations;
-        std::vector<int> current_combination;
+        std::vector<std::vector<double>> combinations;
+        std::vector<double> current_combination;
         GenerateCombinations(0, combinations, current_combination, params);
         return combinations;
     }

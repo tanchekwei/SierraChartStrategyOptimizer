@@ -15,7 +15,7 @@ using json = nlohmann::json;
 
 Logging::Logging(SCStudyInterfaceRef sc) : sc(sc) {}
 
-void Logging::LogMetrics(SCStudyInterfaceRef sc, const std::string &strategyName, const std::string &reportPath, const std::vector<std::pair<std::string, int>> &params, int studyId)
+void Logging::LogMetrics(SCStudyInterfaceRef sc, const std::string &strategyName, const std::string &reportPath, const std::vector<std::pair<std::string, double>> &params, int studyId)
 {
     std::filesystem::create_directories(std::filesystem::path(reportPath).parent_path());
 
@@ -197,7 +197,7 @@ std::vector<std::pair<std::string, std::string>> Logging::GetParameters(int last
     return params;
 }
 
-void Logging::WriteSummaryHeader(std::ofstream &log, const std::string &strategyName, const std::string &dllName, const std::vector<std::pair<std::string, int>> &params)
+void Logging::WriteSummaryHeader(std::ofstream &log, const std::string &strategyName, const std::string &dllName, const std::vector<std::pair<std::string, double>> &params)
 {
     log << "Strategy,DLL Name,";
     for (const auto &p : params)
@@ -357,7 +357,7 @@ json Logging::GetCustomStudyInformation(SCStudyInterfaceRef sc, int studyId)
     return customStudyInformation;
 }
 
-json Logging::GetCombination(const std::vector<std::pair<std::string, int>> &params)
+json Logging::GetCombination(const std::vector<std::pair<std::string, double>> &params)
 {
     json combination;
     for (const auto &p : params)

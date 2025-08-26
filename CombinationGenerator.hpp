@@ -9,7 +9,7 @@
 
 namespace CombinationGenerator
 {
-    std::vector<std::vector<int>> Generate(const std::vector<InputConfig>& param_configs);
+    std::vector<std::vector<double>> Generate(const std::vector<InputConfig> &param_configs);
 }
 
 #endif // COMBINATION_GENERATOR_HPP

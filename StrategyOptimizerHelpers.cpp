@@ -20,7 +20,7 @@
 
 namespace StrategyOptimizerHelpers
 {
-    void HandleStartEvent(SCStudyInterfaceRef sc, SCInputRef Input_ConfigFilePath, StrategyOptimizerConfig *config, std::vector<std::vector<int>> *combinations, ReplayState &replayState, int &ComboIndex)
+    void HandleStartEvent(SCStudyInterfaceRef sc, SCInputRef Input_ConfigFilePath, StrategyOptimizerConfig *config, std::vector<std::vector<double>> *combinations, ReplayState &replayState, int &ComboIndex)
     {
         SCDateTime &backtestStartDateTime = sc.GetPersistentSCDateTimeFast(PersistentVars::BacktestStartDateTime);
         backtestStartDateTime = sc.CurrentSystemDateTimeMS;
@@ -76,7 +76,7 @@ namespace StrategyOptimizerHelpers
         ReplayManager::StartReplayForCombination(sc, *config, *combinations, ComboIndex, replayState);
     }
 
-    void HandleResetEvent(SCStudyInterfaceRef sc, ReplayState &replayState, int &ComboIndex, StrategyOptimizerConfig *config, std::vector<std::vector<int>> *combinations, Logging *logging)
+    void HandleResetEvent(SCStudyInterfaceRef sc, ReplayState &replayState, int &ComboIndex, StrategyOptimizerConfig *config, std::vector<std::vector<double>> *combinations, Logging *logging)
     {
         replayState = ReplayState::Idle;
         ComboIndex = 0;

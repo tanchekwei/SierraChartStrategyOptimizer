@@ -7,12 +7,20 @@
 #include <string>
 #include <vector>
 
+enum class InputType
+{
+    INT,
+    FLOAT,
+    BOOL
+};
+
 struct InputConfig
 {
     int Index;
-    int MinValue;
-    int MaxValue;
-    int Increment;
+    double MinValue;
+    double MaxValue;
+    double Increment;
+    InputType Type;
 };
 
 struct ReplayConfig

@@ -7,8 +7,8 @@
 
 namespace
 {
-    // Helper function to set study inputs for the current combination
-    void SetStudyInputs(SCStudyInterfaceRef sc, int studyID, const std::vector<int> &combo, const std::vector<InputConfig> &paramConfigs)
+// Helper function to set study inputs for the current combination
+    void SetStudyInputs(SCStudyInterfaceRef sc, int studyID, const std::vector<double> &combo, const std::vector<InputConfig> &paramConfigs)
     {
         SCString msg;
         OnChartLogging::AddLog(sc, "Setting study inputs for current combination...");
@@ -16,9 +16,22 @@ namespace
         {
             SCString inputName;
             sc.GetStudyInputName(sc.ChartNumber, studyID, paramConfigs[i].Index, inputName);
-            msg.Format("  Input '%s' (Index %d) set to Value: %d", inputName.GetChars(), paramConfigs[i].Index, combo[i]);
-            OnChartLogging::AddLog(sc, msg);
-            sc.SetChartStudyInputInt(sc.ChartNumber, studyID, paramConfigs[i].Index, combo[i]);
+
+            switch (paramConfigs[i].Type)
+            {
+            case InputType::FLOAT:
+                msg.Format("  Input '%s' (Index %d) set to Value: %f", inputName.GetChars(), paramConfigs[i].Index, combo[i]);
+                OnChartLogging::AddLog(sc, msg);
+                sc.SetChartStudyInputFloat(sc.ChartNumber, studyID, paramConfigs[i].Index, combo[i]);
+                break;
+            case InputType::INT:
+            case InputType::BOOL:
+            default:
+                msg.Format("  Input '%s' (Index %d) set to Value: %d", inputName.GetChars(), paramConfigs[i].Index, static_cast<int>(combo[i]));
+                OnChartLogging::AddLog(sc, msg);
+                sc.SetChartStudyInputInt(sc.ChartNumber, studyID, paramConfigs[i].Index, static_cast<int>(combo[i]));
+                break;
+            }
         }
     }
 
@@ -59,25 +72,25 @@ namespace ReplayManager
     void StartReplayForCombination(
         SCStudyInterfaceRef sc,
         const StrategyOptimizerConfig& config,
-        const std::vector<std::vector<int>>& combinations,
+        const std::vector<std::vector<double>>& combinations,
         int comboIndex,
         ReplayState &replayState)
     {
         SCString msg;
         msg.Format("--- Starting Combination %d/%d ---", comboIndex + 1, (int)combinations.size());
-        OnChartLogging::AddLog(sc, msg);
-
+            OnChartLogging::AddLog(sc, msg);
+            
         const auto &currentCombo = combinations[comboIndex];
         int studyID = sc.GetStudyIDByName(sc.ChartNumber, config.CustomStudyShortName.c_str(), 1);
         if (studyID == 0)
         {
-            msg.Format("Error: Failed to find study with short name=%s", config.CustomStudyShortName.c_str());
+msg.Format("Error: Failed to find study with short name=%s", config.CustomStudyShortName.c_str());
             OnChartLogging::AddLog(sc, msg);
             return;
         }
 
         SetStudyInputs(sc, studyID, currentCombo, config.ParamConfigs);
-        InitiateReplay(sc, config.ReplayConfig);
+InitiateReplay(sc, config.ReplayConfig);
 
         sc.RecalculateChart(sc.ChartNumber);
 

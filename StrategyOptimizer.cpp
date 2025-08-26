@@ -33,7 +33,7 @@ SCSFExport scsf_StrategyOptimizer(SCStudyInterfaceRef sc)
     ReplayState &replayState = reinterpret_cast<ReplayState &>(sc.GetPersistentIntFast(PersistentVars::ReplayStateEnum));
     int &comboIndex = sc.GetPersistentIntFast(PersistentVars::ComboIndex);
     auto *config = reinterpret_cast<StrategyOptimizerConfig *>(sc.GetPersistentPointer(PersistentVars::BacktestConfigPtr));
-    auto *combinations = reinterpret_cast<std::vector<std::vector<int>> *>(sc.GetPersistentPointer(PersistentVars::CombinationsPtr));
+    auto *combinations = reinterpret_cast<std::vector<std::vector<double>> *>(sc.GetPersistentPointer(PersistentVars::CombinationsPtr));
     auto *logging = reinterpret_cast<Logging *>(sc.GetPersistentPointer(PersistentVars::LoggingPtr));
 
     if (sc.LastCallToFunction)
@@ -70,7 +70,7 @@ void InitializePersistentPointers(SCStudyInterfaceRef sc)
 
     if (sc.GetPersistentPointer(PersistentVars::CombinationsPtr) == nullptr)
     {
-        sc.SetPersistentPointer(PersistentVars::CombinationsPtr, new std::vector<std::vector<int>>());
+        sc.SetPersistentPointer(PersistentVars::CombinationsPtr, new std::vector<std::vector<double>>());
     }
 
     if (sc.GetPersistentPointer(PersistentVars::LoggingPtr) == nullptr)
@@ -150,7 +150,7 @@ bool HandleReplayLogic(SCStudyInterfaceRef sc)
 void HandleReplayCompletion(SCStudyInterfaceRef sc)
 {
     int &comboIndex = sc.GetPersistentIntFast(PersistentVars::ComboIndex);
-    auto *combinations = reinterpret_cast<std::vector<std::vector<int>> *>(sc.GetPersistentPointer(PersistentVars::CombinationsPtr));
+    auto *combinations = reinterpret_cast<std::vector<std::vector<double>> *>(sc.GetPersistentPointer(PersistentVars::CombinationsPtr));
     auto *config = reinterpret_cast<StrategyOptimizerConfig *>(sc.GetPersistentPointer(PersistentVars::BacktestConfigPtr));
     auto *logging = reinterpret_cast<Logging *>(sc.GetPersistentPointer(PersistentVars::LoggingPtr));
     ReplayState &replayState = reinterpret_cast<ReplayState &>(sc.GetPersistentIntFast(PersistentVars::ReplayStateEnum));
@@ -161,7 +161,7 @@ void HandleReplayCompletion(SCStudyInterfaceRef sc)
 
     const auto &currentCombo = (*combinations)[comboIndex];
     int studyID = sc.GetStudyIDByName(sc.ChartNumber, config->CustomStudyShortName.c_str(), 1);
-    std::vector<std::pair<std::string, int>> params;
+    std::vector<std::pair<std::string, double>> params;
 
     std::stringstream paramStream;
     for (size_t i = 0; i < currentCombo.size(); ++i)
@@ -221,7 +221,7 @@ void HandleMenuEvents(SCStudyInterfaceRef sc)
     ReplayState &replayState = reinterpret_cast<ReplayState &>(sc.GetPersistentIntFast(PersistentVars::ReplayStateEnum));
     int &comboIndex = sc.GetPersistentIntFast(PersistentVars::ComboIndex);
     auto *config = reinterpret_cast<StrategyOptimizerConfig *>(sc.GetPersistentPointer(PersistentVars::BacktestConfigPtr));
-    auto *combinations = reinterpret_cast<std::vector<std::vector<int>> *>(sc.GetPersistentPointer(PersistentVars::CombinationsPtr));
+    auto *combinations = reinterpret_cast<std::vector<std::vector<double>> *>(sc.GetPersistentPointer(PersistentVars::CombinationsPtr));
     auto *logging = reinterpret_cast<Logging *>(sc.GetPersistentPointer(PersistentVars::LoggingPtr));
 
     if (sc.MenuEventID == Input_Start.GetInt())
