@@ -26,7 +26,7 @@ void HandleReplayCompletion(SCStudyInterfaceRef sc);
 
 SCDLLName("scsf_StrategyOptimizer")
 
-SCSFExport scsf_StrategyOptimizer(SCStudyInterfaceRef sc)
+    SCSFExport scsf_StrategyOptimizer(SCStudyInterfaceRef sc)
 {
     InitializePersistentPointers(sc);
 
@@ -57,7 +57,7 @@ SCSFExport scsf_StrategyOptimizer(SCStudyInterfaceRef sc)
     {
         return;
     }
-    
+
     HandleMenuEvents(sc);
 }
 
@@ -95,7 +95,7 @@ void HandleSetDefaults(SCStudyInterfaceRef sc)
     sc.Input[StudyInputs::StartButtonNumber].Name = "Start Button Number";
     sc.Input[StudyInputs::StartButtonNumber].SetInt(6);
     sc.Input[StudyInputs::StartButtonNumber].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
-    
+
     sc.Input[StudyInputs::ResetButtonNumber].Name = "Reset Button Number";
     sc.Input[StudyInputs::ResetButtonNumber].SetInt(7);
     sc.Input[StudyInputs::ResetButtonNumber].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
@@ -212,7 +212,8 @@ void HandleReplayCompletion(SCStudyInterfaceRef sc)
 
 void HandleMenuEvents(SCStudyInterfaceRef sc)
 {
-    if (sc.MenuEventID == 0) return;
+    if (sc.MenuEventID == 0)
+        return;
 
     SCInputRef Input_Start = sc.Input[StudyInputs::StartButtonNumber];
     SCInputRef Input_Reset = sc.Input[StudyInputs::ResetButtonNumber];

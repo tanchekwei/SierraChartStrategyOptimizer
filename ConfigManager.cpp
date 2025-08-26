@@ -15,10 +15,12 @@ namespace
 {
     void ParseMainSettings(const json &root, StrategyOptimizerConfig &outConfig)
     {
-        if (!root.contains("customStudyFileAndFunctionName")) throw std::runtime_error("Missing required field: 'customStudyFileAndFunctionName'");
+        if (!root.contains("customStudyFileAndFunctionName"))
+            throw std::runtime_error("Missing required field: 'customStudyFileAndFunctionName'");
         outConfig.CustomStudyFileAndFunctionName = root["customStudyFileAndFunctionName"].get<std::string>();
 
-        if (!root.contains("customStudyShortName")) throw std::runtime_error("Missing required field: 'customStudyShortName'");
+        if (!root.contains("customStudyShortName"))
+            throw std::runtime_error("Missing required field: 'customStudyShortName'");
         outConfig.CustomStudyShortName = root["customStudyShortName"].get<std::string>();
 
         outConfig.OpenResultsFolder = root.value("openResultsFolder", true);
@@ -26,25 +28,32 @@ namespace
 
     void ParseReplayConfig(const json &root, StrategyOptimizerConfig &outConfig, SCStudyInterfaceRef sc)
     {
-        if (!root.contains("replayConfig")) throw std::runtime_error("Missing required section: 'replayConfig'");
+        if (!root.contains("replayConfig"))
+            throw std::runtime_error("Missing required section: 'replayConfig'");
         const auto &replayParams = root["replayConfig"];
 
-        if (!replayParams.contains("replaySpeed")) throw std::runtime_error("Missing required field in 'replayConfig': 'replaySpeed'");
+        if (!replayParams.contains("replaySpeed"))
+            throw std::runtime_error("Missing required field in 'replayConfig': 'replaySpeed'");
         outConfig.ReplayConfig.ReplaySpeed = replayParams["replaySpeed"].get<float>();
 
-        if (!replayParams.contains("startDate")) throw std::runtime_error("Missing required field in 'replayConfig': 'startDate'");
+        if (!replayParams.contains("startDate"))
+            throw std::runtime_error("Missing required field in 'replayConfig': 'startDate'");
         outConfig.ReplayConfig.StartDate = replayParams["startDate"].get<std::string>().c_str();
 
-        if (!replayParams.contains("startTime")) throw std::runtime_error("Missing required field in 'replayConfig': 'startTime'");
+        if (!replayParams.contains("startTime"))
+            throw std::runtime_error("Missing required field in 'replayConfig': 'startTime'");
         outConfig.ReplayConfig.StartTime = replayParams["startTime"].get<std::string>().c_str();
 
-        if (!replayParams.contains("replayMode")) throw std::runtime_error("Missing required field in 'replayConfig': 'replayMode'");
+        if (!replayParams.contains("replayMode"))
+            throw std::runtime_error("Missing required field in 'replayConfig': 'replayMode'");
         outConfig.ReplayConfig.ReplayMode = replayParams["replayMode"].get<int>();
-        
-        if (!replayParams.contains("chartsToReplay")) throw std::runtime_error("Missing required field in 'replayConfig': 'chartsToReplay'");
+
+        if (!replayParams.contains("chartsToReplay"))
+            throw std::runtime_error("Missing required field in 'replayConfig': 'chartsToReplay'");
         outConfig.ReplayConfig.ChartsToReplay = replayParams["chartsToReplay"].get<int>();
 
-        if (!replayParams.contains("clearExistingTradeSimulationDataForSymbolAndTradeAccount")) throw std::runtime_error("Missing required field in 'replayConfig': 'clearExistingTradeSimulationDataForSymbolAndTradeAccount'");
+        if (!replayParams.contains("clearExistingTradeSimulationDataForSymbolAndTradeAccount"))
+            throw std::runtime_error("Missing required field in 'replayConfig': 'clearExistingTradeSimulationDataForSymbolAndTradeAccount'");
         outConfig.ReplayConfig.ClearExistingTradeSimulationDataForSymbolAndTradeAccount = replayParams["clearExistingTradeSimulationDataForSymbolAndTradeAccount"].get<int>();
 
         SCDateTimeMS DateValue = sc.DateStringToSCDateTime(outConfig.ReplayConfig.StartDate);
@@ -71,7 +80,8 @@ namespace
 
     void ParseParamConfigs(const json &root, StrategyOptimizerConfig &outConfig)
     {
-        if (!root.contains("paramConfigs")) throw std::runtime_error("Missing required section: 'paramConfigs'");
+        if (!root.contains("paramConfigs"))
+            throw std::runtime_error("Missing required section: 'paramConfigs'");
         const auto &inputs = root["paramConfigs"];
         if (inputs.is_array())
         {
@@ -86,8 +96,10 @@ namespace
                 if (input.contains("type"))
                 {
                     std::string typeStr = input["type"].get<std::string>();
-                    if (typeStr == "float") type = InputType::FLOAT;
-                    else if (typeStr == "bool") type = InputType::BOOL;
+                    if (typeStr == "float")
+                        type = InputType::FLOAT;
+                    else if (typeStr == "bool")
+                        type = InputType::BOOL;
                 }
 
                 outConfig.ParamConfigs.push_back({input["index"].get<int>(), input["min"].get<double>(), input["max"].get<double>(), input["increment"].get<double>(), type});
@@ -162,7 +174,7 @@ namespace ConfigLoader
             OnChartLogging::AddLog(sc, "ERROR: Please check the JSON structure, syntax, and ensure all required fields are present.");
             return false;
         }
-        catch (const std::exception& e)
+        catch (const std::exception &e)
         {
             SCString error_msg;
             error_msg.Format("ERROR: An unexpected error occurred while loading config from '%s': %s", filePath.c_str(), e.what());

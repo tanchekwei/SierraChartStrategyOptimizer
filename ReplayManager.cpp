@@ -7,7 +7,7 @@
 
 namespace
 {
-// Helper function to set study inputs for the current combination
+    // Helper function to set study inputs for the current combination
     void SetStudyInputs(SCStudyInterfaceRef sc, int studyID, const std::vector<double> &combo, const std::vector<InputConfig> &paramConfigs)
     {
         SCString msg;
@@ -71,26 +71,26 @@ namespace ReplayManager
 
     void StartReplayForCombination(
         SCStudyInterfaceRef sc,
-        const StrategyOptimizerConfig& config,
-        const std::vector<std::vector<double>>& combinations,
+        const StrategyOptimizerConfig &config,
+        const std::vector<std::vector<double>> &combinations,
         int comboIndex,
         ReplayState &replayState)
     {
         SCString msg;
         msg.Format("--- Starting Combination %d/%d ---", comboIndex + 1, (int)combinations.size());
-            OnChartLogging::AddLog(sc, msg);
-            
+        OnChartLogging::AddLog(sc, msg);
+
         const auto &currentCombo = combinations[comboIndex];
         int studyID = sc.GetStudyIDByName(sc.ChartNumber, config.CustomStudyShortName.c_str(), 1);
         if (studyID == 0)
         {
-msg.Format("Error: Failed to find study with short name=%s", config.CustomStudyShortName.c_str());
+            msg.Format("Error: Failed to find study with short name=%s", config.CustomStudyShortName.c_str());
             OnChartLogging::AddLog(sc, msg);
             return;
         }
 
         SetStudyInputs(sc, studyID, currentCombo, config.ParamConfigs);
-InitiateReplay(sc, config.ReplayConfig);
+        InitiateReplay(sc, config.ReplayConfig);
 
         sc.RecalculateChart(sc.ChartNumber);
 

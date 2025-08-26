@@ -40,13 +40,13 @@ namespace StrategyOptimizerHelpers
             OnChartLogging::AddLog(sc, "Configuration loaded successfully. Generating parameter combinations...");
             *combinations = CombinationGenerator::Generate(config->ParamConfigs);
 
-            int& enableLog = sc.GetPersistentIntFast(PersistentVars::EnableLog);
+            int &enableLog = sc.GetPersistentIntFast(PersistentVars::EnableLog);
             enableLog = config->LogConfig.EnableLog;
 
-            int& enableShowLogOnChart = sc.GetPersistentIntFast(PersistentVars::EnableShowLogOnChart);
+            int &enableShowLogOnChart = sc.GetPersistentIntFast(PersistentVars::EnableShowLogOnChart);
             enableShowLogOnChart = config->LogConfig.EnableShowLogOnChart;
-            
-            int& maxLogLines = sc.GetPersistentIntFast(PersistentVars::MaxLogLines);
+
+            int &maxLogLines = sc.GetPersistentIntFast(PersistentVars::MaxLogLines);
             maxLogLines = config->LogConfig.MaxLogLines;
 
             if (combinations->empty())

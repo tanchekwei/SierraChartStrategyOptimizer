@@ -6,9 +6,9 @@
 
 namespace OnChartLogging
 {
-    std::vector<SCString>* GetLogMessagesVector(SCStudyInterfaceRef sc)
+    std::vector<SCString> *GetLogMessagesVector(SCStudyInterfaceRef sc)
     {
-        auto* logMessages = reinterpret_cast<std::vector<SCString>*>(sc.GetPersistentPointer(PersistentVars::LogMessagesPtr));
+        auto *logMessages = reinterpret_cast<std::vector<SCString> *>(sc.GetPersistentPointer(PersistentVars::LogMessagesPtr));
         if (logMessages == nullptr)
         {
             logMessages = new std::vector<SCString>();
@@ -17,20 +17,21 @@ namespace OnChartLogging
         return logMessages;
     }
 
-    void AddLog(SCStudyInterfaceRef sc, const SCString& message)
+    void AddLog(SCStudyInterfaceRef sc, const SCString &message)
     {
-        int& enableLog = sc.GetPersistentIntFast(PersistentVars::EnableLog);
-        if (enableLog == 0) return;
+        int &enableLog = sc.GetPersistentIntFast(PersistentVars::EnableLog);
+        if (enableLog == 0)
+            return;
 
         sc.AddMessageToLog(message, 0);
-        auto* logMessages = GetLogMessagesVector(sc);
+        auto *logMessages = GetLogMessagesVector(sc);
         if (logMessages->size() >= 20)
         {
             logMessages->erase(logMessages->begin());
         }
         logMessages->push_back(message);
-        
-        int& enableShowLogOnChart = sc.GetPersistentIntFast(PersistentVars::EnableShowLogOnChart);
+
+        int &enableShowLogOnChart = sc.GetPersistentIntFast(PersistentVars::EnableShowLogOnChart);
         if (enableShowLogOnChart != 0)
         {
             DrawLogs(sc);
@@ -39,8 +40,8 @@ namespace OnChartLogging
 
     void DrawLogs(SCStudyInterfaceRef sc)
     {
-        int& textDrawingLineNumber = sc.GetPersistentIntFast(PersistentVars::LogDrawingLineNumber);
-        auto* logMessages = GetLogMessagesVector(sc);
+        int &textDrawingLineNumber = sc.GetPersistentIntFast(PersistentVars::LogDrawingLineNumber);
+        auto *logMessages = GetLogMessagesVector(sc);
 
         if (logMessages->empty())
         {
@@ -54,10 +55,10 @@ namespace OnChartLogging
         }
 
         SCString logText;
-        for (const auto& msg : *logMessages)
+        for (const auto &msg : *logMessages)
         {
             logText += msg;
-            logText += "\n"; 
+            logText += "\n";
         }
 
         s_UseTool tool;
@@ -70,12 +71,12 @@ namespace OnChartLogging
         tool.AddAsUserDrawnDrawing = 1;
         tool.AllowSaveToChartbook = 0;
         tool.UseRelativeVerticalValues = true;
-        tool.BeginDateTime = 5; 
-        tool.BeginValue = 95;   
+        tool.BeginDateTime = 5;
+        tool.BeginValue = 95;
         tool.Color = RGB(255, 255, 255);
         tool.Text = logText;
         tool.FontSize = 10;
-        tool.TextAlignment = DT_LEFT | DT_TOP; 
+        tool.TextAlignment = DT_LEFT | DT_TOP;
         tool.FontFace = sc.GetChartTextFontFaceName();
 
         if (sc.UseTool(tool) > 0)
@@ -86,8 +87,8 @@ namespace OnChartLogging
 
     void ClearLogs(SCStudyInterfaceRef sc)
     {
-        int& textDrawingLineNumber = sc.GetPersistentIntFast(PersistentVars::LogDrawingLineNumber);
-        auto* logMessages = GetLogMessagesVector(sc);
+        int &textDrawingLineNumber = sc.GetPersistentIntFast(PersistentVars::LogDrawingLineNumber);
+        auto *logMessages = GetLogMessagesVector(sc);
 
         logMessages->clear();
         if (textDrawingLineNumber != 0)

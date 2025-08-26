@@ -32,7 +32,6 @@ void Logging::LogMetrics(SCStudyInterfaceRef sc, const std::string &strategyName
 
     log << result.dump(4);
 
-
     // csv
     std::stringstream fileNameStream;
     fileNameStream
