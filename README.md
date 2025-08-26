@@ -4,10 +4,9 @@
 
 -   **Automated Backtesting**: Executes your trading strategy across all possible parameter combinations within user-defined ranges.
 -   **Parameter Optimization**: Helps you discover the most profitable and robust settings for your strategy.
--   **JSON-Based Configuration**: Easily configure backtest parameters, including study inputs, replay settings, and date ranges.
+-   **JSON-Based Configuration**: Easily configure backtest parameters, including study inputs, replay settings, and start date.
 -   **Detailed Logging**: Provides real-time feedback and detailed logs of the backtesting process, displayed directly on the chart.
--   **Result Analysis**: Automatically analyzes the results of all backtest runs and generates a summary CSV file, sorted by profitability.
--   **Extensible Design**: A modular and refactored codebase makes it easy to customize and extend for your specific needs.
+-   **Result Analysis**: Automatically generates a summary CSV file from results of all backtest runs, sorted by profitability.
 
 ## How It Works
 
@@ -47,6 +46,9 @@ The "Reset" button allows you to clear the current state.
     *   In `StrategyOptimizerConfig.json`, set the `customStudyShortName` field.
     *   In the Sierra Chart **Chart Studies** window, select the strategy study you want to optimize. Go to its **Settings** and set its **Short Name** to the *exact same value* as `customStudyShortName`. **This is crucial for the optimizer to find your study.**
     *   In `StrategyOptimizerConfig.json`, set the `customStudyFileAndFunctionName` field to the full name of your study's DLL and function name (find it in study setting `DLLName.FunctionName`) text box (e.g., `MyStrategyDLL_1234.scsf_MyStrategyFunction`).
+
+    ![DLLName.FunctionName](images/DLLName.FunctionName.png)
+
 7.  **Add Control Bar Buttons**:
     *   Right-click on a control bar in Sierra Chart (e.g., Control Bar 1).
     *   Select **Customize Control Bar...**.
@@ -127,6 +129,9 @@ To find the correct `index` for an input:
 1.  Open the **Chart Studies** window (`F6`).
 2.  Select your strategy study and click **Settings**.
 3.  In the **Inputs** tab, look for the text next to each input name, which looks like `(In: X)`, where `X` is the input number.
+
+![alt text](images/InputIndex.png)
+
 4.  The `index` in the JSON configuration is **zero-based**, so you must subtract 1 from the number you see.
     
     `index = X - 1`
