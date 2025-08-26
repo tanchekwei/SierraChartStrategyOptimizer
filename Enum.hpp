@@ -32,10 +32,9 @@ namespace StudyInputs
 {
     enum
     {
-        StartResumeReplay = 0,
-        ConfigFilePath = 1,
-        Reset = 2,
-        OpenResultsFolder = 3,
+        StartButtonNumber = 0,
+        ResetButtonNumber = 1,
+        ConfigFilePath = 2,
     };
 }
 

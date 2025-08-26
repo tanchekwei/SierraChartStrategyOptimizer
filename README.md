@@ -54,6 +54,10 @@ The "Reset" button allows you to clear the current state.
     *   Select **Customize Control Bar...**.
     *   In the **Available Control Bar Commands**, expand **Advanced Custom Study Button**.
     *   Add **ACS6 - Start | CS6** and **ACS7 - Reset | CS7** to your control bar.
+    *   If ACS6 or ACS7 are already in use, update the button numbers in the Strategy Optimizer settings to an available option.
+
+    ![ACS6 or ACS7](images/Button.png)
+
 8.  **Run the Optimization**:
     *   Once everything is configured, click the **CS6** (Start) button on your control bar to begin the optimization process.
 

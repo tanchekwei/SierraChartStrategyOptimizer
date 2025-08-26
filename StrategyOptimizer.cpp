@@ -92,26 +92,26 @@ void HandleSetDefaults(SCStudyInterfaceRef sc)
     sc.Subgraph[Subgraphs::LogText].PrimaryColor = RGB(255, 255, 255);
     sc.Subgraph[Subgraphs::LogText].LineWidth = 10; // Used for font size
 
-    sc.Input[StudyInputs::StartResumeReplay].Name = "Start";
-    sc.Input[StudyInputs::StartResumeReplay].SetInt(6);
-    sc.Input[StudyInputs::StartResumeReplay].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
+    sc.Input[StudyInputs::StartButtonNumber].Name = "Start Button Number";
+    sc.Input[StudyInputs::StartButtonNumber].SetInt(6);
+    sc.Input[StudyInputs::StartButtonNumber].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
+    
+    sc.Input[StudyInputs::ResetButtonNumber].Name = "Reset Button Number";
+    sc.Input[StudyInputs::ResetButtonNumber].SetInt(7);
+    sc.Input[StudyInputs::ResetButtonNumber].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
 
     sc.Input[StudyInputs::ConfigFilePath].Name = "Config File Path";
     sc.Input[StudyInputs::ConfigFilePath].SetString("C:\\SierraChart\\Data\\StrategyOptimizerConfig.json");
-
-    sc.Input[StudyInputs::Reset].Name = "Reset";
-    sc.Input[StudyInputs::Reset].SetInt(7);
-    sc.Input[StudyInputs::Reset].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
 
     OnChartLogging::AddLog(sc, "Strategy Optimizer defaults set.");
 }
 
 void HandleFullRecalculation(SCStudyInterfaceRef sc)
 {
-    sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::StartResumeReplay].GetInt(), "Start");
-    sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::StartResumeReplay].GetInt(), "Start");
-    sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::Reset].GetInt(), "Reset");
-    sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::Reset].GetInt(), "Reset");
+    sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start Strategy Optimizer");
+    sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start Strategy Optimizer");
+    sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset Strategy Optimizer");
+    sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset Strategy Optimizer");
 }
 
 bool HandleReplayLogic(SCStudyInterfaceRef sc)
@@ -214,8 +214,8 @@ void HandleMenuEvents(SCStudyInterfaceRef sc)
 {
     if (sc.MenuEventID == 0) return;
 
-    SCInputRef Input_Start = sc.Input[StudyInputs::StartResumeReplay];
-    SCInputRef Input_Reset = sc.Input[StudyInputs::Reset];
+    SCInputRef Input_Start = sc.Input[StudyInputs::StartButtonNumber];
+    SCInputRef Input_Reset = sc.Input[StudyInputs::ResetButtonNumber];
     SCInputRef Input_ConfigFilePath = sc.Input[StudyInputs::ConfigFilePath];
 
     ReplayState &replayState = reinterpret_cast<ReplayState &>(sc.GetPersistentIntFast(PersistentVars::ReplayStateEnum));
