@@ -180,8 +180,7 @@ void HandleReplayCompletion(SCStudyInterfaceRef sc)
 
     std::stringstream reportFileName;
     reportFileName << config->CustomStudyFileAndFunctionName
-                   << "-" << comboIndex
-                   << paramStream.str();
+                   << "-" << comboIndex;
 
     std::string resultsDir = std::filesystem::path(sc.Input[StudyInputs::ConfigFilePath].GetString()).parent_path().string() + "/results/" + config->CustomStudyFileAndFunctionName + "-" + startDateTimeString + "/";
     std::filesystem::create_directories(resultsDir);
