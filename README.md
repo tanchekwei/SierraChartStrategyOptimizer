@@ -43,7 +43,7 @@ The "Reset" button allows you to clear the current state.
     *   In the **Chart Studies** window, select the **Strategy Optimizer** study and go to its **Settings**.
     *   Locate the **Config File Path** input. This is where you will specify the path to your configuration file. The default is `C:\SierraChart\Data\StrategyOptimizerConfig.json`.
 5.  **Create and Configure the JSON file**:
-    *   Find the `StrategyOptimizerConfig.example.json` file in the repository.
+    *   Find the [`StrategyOptimizerConfig.example.json`](https://github.com/tanchekwei/SierraChartStrategyOptimizer/blob/main/StrategyOptimizerConfig.example.json) file in the repository.
     *   Make a copy of this file and rename it to `StrategyOptimizerConfig.json` in your Sierra Chart `Data` directory.
     *   Open `StrategyOptimizerConfig.json` and update it for your backtesting needs. Refer to the **JSON Configuration Example** section below for details.
 6.  **Link Your Strategy**:
