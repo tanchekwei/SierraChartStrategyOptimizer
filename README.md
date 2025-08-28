@@ -1,5 +1,6 @@
 # Sierra Chart ACSIL Strategy Optimizer
 ![alt text](images/image.png)
+![alt text](images/Report.png)
 ## Features
 
 -   **Automated Backtesting**: Executes your trading strategy across all possible parameter combinations within user-defined ranges.
