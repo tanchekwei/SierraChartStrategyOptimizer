@@ -150,21 +150,21 @@ For example, to test different combinations of `Profit Target (In: 4)`, `ATR Mul
 "paramConfigs": [
     {
         "type": "int",
-        "index": 0,
+        "index": 3,
         "min": 10,
         "max": 50,
         "increment": 10
     },
     {
         "type": "float",
-        "index": 0,
+        "index": 6,
         "min": 1,
         "max": 2,
         "increment": 0.5
     },
     {
         "type": "bool",
-        "index": 0,
+        "index": 9,
         "min": 0,
         "max": 1,
         "increment": 1
@@ -177,8 +177,8 @@ For example, to test different combinations of `Profit Target (In: 4)`, `ATR Mul
 After the optimization process completes, the optimizer generates a set of report files. If `openResultsFolder` is set to `true` in your configuration, the folder containing these reports will open automatically.
 
 Each optimization run creates a new folder named with a timestamp. Inside this folder, you will find:
--   **A subfolder for each parameter combination tested.**
--   **A `summary.csv` file.**
+-   **A json and csv file for each parameter combination tested.**
+-   **A `...summary.csv` file.**
 
 ### Summary Report
 The `summary.csv` file provides a high-level overview of all the backtest runs, with each row representing a different parameter combination. The results are sorted by `Total P/L`, allowing you to quickly identify the best-performing settings. Key columns include:
