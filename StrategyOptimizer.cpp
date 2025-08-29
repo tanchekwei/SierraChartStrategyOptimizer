@@ -53,12 +53,16 @@ SCSFExport scsf_StrategyOptimizer(SCStudyInterfaceRef sc)
         HandleFullRecalculation(sc);
     }
 
+    if (sc.MenuEventID != 0)
+    {
+        HandleMenuEvents(sc);
+        return;
+    }
+
     if (HandleReplayLogic(sc))
     {
         return;
     }
-
-    HandleMenuEvents(sc);
 }
 
 void InitializePersistentPointers(SCStudyInterfaceRef sc)
@@ -114,8 +118,8 @@ void HandleFullRecalculation(SCStudyInterfaceRef sc)
 {
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start Strategy Optimizer");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start Strategy Optimizer");
-    sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset Strategy Optimizer");
-    sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset Strategy Optimizer");
+    sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop Strategy Optimizer");
+    sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop Strategy Optimizer");
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify Strategy Optimizer Configuration");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify Config");
 }
@@ -140,6 +144,7 @@ bool HandleReplayLogic(SCStudyInterfaceRef sc)
         else if (replayStatus == REPLAY_STOPPED || replayStatus == REPLAY_PAUSED)
         {
             OnChartLogging::AddLog(sc, "Attempting to resume replay...");
+            sc.ResumeChartReplay(sc.ChartNumber);
         }
         return true;
     }
@@ -217,9 +222,6 @@ void HandleReplayCompletion(SCStudyInterfaceRef sc)
 
 void HandleMenuEvents(SCStudyInterfaceRef sc)
 {
-    if (sc.MenuEventID == 0)
-        return;
-
     SCInputRef Input_Start = sc.Input[StudyInputs::StartButtonNumber];
     SCInputRef Input_Reset = sc.Input[StudyInputs::ResetButtonNumber];
     SCInputRef Input_VerifyConfig = sc.Input[StudyInputs::VerifyConfigButtonNumber];

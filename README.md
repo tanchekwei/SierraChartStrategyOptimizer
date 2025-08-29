@@ -20,7 +20,7 @@ When you click the "Start" button, the optimizer generates all possible paramete
 
 After all combinations have been tested, the optimizer generated JSON files and creates a summary CSV report, with the results sorted by total profit/loss.
 
-The "Reset" button allows you to clear the current state.
+The "Reset / Stop" button allows you to clear the current state and stop replay.
 
 [<video controls src="images/2025-08-27 05-33-51-1.mp4" title=""></video>
 ](https://github.com/user-attachments/assets/fb0005f0-b4c7-4264-9b12-fdf3115ef22b)
