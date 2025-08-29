@@ -5,10 +5,10 @@
 #include "OnChartLogging.hpp"
 #include "Enum.hpp"
 
-namespace
+namespace ReplayManager
 {
     // Helper function to set study inputs for the current combination
-    void SetStudyInputs(SCStudyInterfaceRef sc, int studyID, const std::vector<double> &combo, const std::vector<InputConfig> &paramConfigs)
+    void SetStudyInputsInternal(SCStudyInterfaceRef sc, int studyID, const std::vector<double> &combo, const std::vector<InputConfig> &paramConfigs)
     {
         SCString msg;
         OnChartLogging::AddLog(sc, "Setting study inputs for current combination...");
@@ -56,10 +56,7 @@ namespace
             OnChartLogging::AddLog(sc, "Chart replay start command sent successfully.");
         }
     }
-}
 
-namespace ReplayManager
-{
     void ResetButton(SCStudyInterfaceRef sc, SCInputRef input)
     {
         const int ButtonState = (sc.PointerEventType == SC_ACS_BUTTON_ON) ? 1 : 0;
@@ -89,10 +86,31 @@ namespace ReplayManager
             return;
         }
 
-        SetStudyInputs(sc, studyID, currentCombo, config.ParamConfigs);
+        SetStudyInputsInternal(sc, studyID, currentCombo, config.ParamConfigs);
         InitiateReplay(sc, config.ReplayConfig);
 
         replayState = ReplayState::WaitingForReplayToStart;
         OnChartLogging::AddLog(sc, "State changed: Waiting for replay data to load.");
+    }
+
+    void SetStudyInputs(SCStudyInterfaceRef sc, const StrategyOptimizerConfig &config, const std::vector<double> &combinations)
+    {
+        SCString msg;
+        int studyID = sc.GetStudyIDByName(sc.ChartNumber, config.CustomStudyShortName.c_str(), 1);
+        if (studyID == 0)
+        {
+            msg.Format("Error: Failed to find study with short name=%s", config.CustomStudyShortName.c_str());
+            OnChartLogging::AddLog(sc, msg);
+            return;
+        }
+
+        if (combinations.empty())
+        {
+            OnChartLogging::AddLog(sc, "No combinations provided to set study inputs.");
+            return;
+        }
+        
+        // For verification, we display the inputs of the first combination.
+        SetStudyInputsInternal(sc, studyID, combinations, config.ParamConfigs);
     }
 }

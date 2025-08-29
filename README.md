@@ -8,10 +8,13 @@
 -   **JSON-Based Configuration**: Easily configure backtest parameters, including study inputs, replay settings, and start date.
 -   **Detailed Logging**: Provides real-time feedback and detailed logs of the backtesting process, displayed directly on the chart.
 -   **Result Analysis**: Automatically generates a summary CSV file from results of all backtest runs, sorted by profitability.
+-   **Configuration Verification**: Allows you to verify your configuration settings and see the applied study inputs before starting a full backtest.
 
 ## How It Works
 
 The Strategy Optimizer reads a configuration file (e.g., `StrategyOptimizerConfig.json`) that defines the parameters for the backtest. This file includes the name of the study to be tested, the input ranges for each parameter, and the replay settings.
+
+You can use the "Verify Config" button to load your configuration and display the initial study inputs on the chart, allowing you to confirm that your settings are correctly interpreted before running a full optimization.
 
 When you click the "Start" button, the optimizer generates all possible parameter combinations and begins the backtesting process. It systematically applies each combination to the target study, runs a chart replay, and logs the performance metrics for each run into individual JSON files.
 
@@ -57,13 +60,20 @@ The "Reset" button allows you to clear the current state.
     *   Right-click on a control bar in Sierra Chart (e.g., Control Bar 1).
     *   Select **Customize Control Bar...**.
     *   In the **Available Control Bar Commands**, expand **Advanced Custom Study Button**.
-    *   Add **ACS6 - Start | CS6** and **ACS7 - Reset | CS7** to your control bar.
-    *   If ACS6 or ACS7 are already in use, update the button numbers in the Strategy Optimizer settings to an available option.
+    *   Add **ACS6 - Verify Config | CS6**, **ACS7 - Start | CS7** and **ACS8 - Reset | CS8** to your control bar.
+    *   If any of these button numbers (6, 7, 8) are already in use, update the corresponding button numbers in the Strategy Optimizer settings to an available option.
+    *   **Verify Config (CS6)**: Loads and displays the configuration parameters on the chart without starting a replay. Use this to ensure your `StrategyOptimizerConfig.json` is correctly parsed and the study inputs are set as expected.
+    *   **Start (CS7)**: Begins the full backtesting and optimization process.
+    *   **Reset (CS8)**: Clears the current state of the optimizer.
 
     ![ACS6 or ACS7](images/Button.png)
 
-8.  **Run the Optimization**:
-    *   Once everything is configured, click the **CS6** (Start) button on your control bar to begin the optimization process.
+8.  **Verify Configuration (Recommended)**:
+    *   Before running a full optimization, click the **CS6** (Verify Config) button on your control bar.
+    *   Check the chart log to confirm that your `StrategyOptimizerConfig.json` file has been loaded correctly and the study inputs for the first combination are displayed as intended.
+
+9.  **Run the Optimization**:
+    *   Once everything is configured and verified, click the **CS7** (Start) button on your control bar to begin the optimization process.
 
 ## JSON Configuration Example
 
@@ -171,6 +181,10 @@ For example, to test different combinations of `Profit Target (In: 4)`, `ATR Mul
     },
 ]
 ```
+
+## Support the Project
+
+If you find this Strategy Optimizer useful, please consider giving the repository a star on GitHub! Your support helps in maintaining and improving this tool.
 
 ## Results and Reports
 

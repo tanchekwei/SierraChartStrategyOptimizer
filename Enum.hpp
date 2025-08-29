@@ -5,26 +5,26 @@
 
 enum class ReplayState
 {
-    Idle = 0,
-    WaitingForReplayToStart = 1,
-    ReplayInProgress = 2
+    Idle,
+    WaitingForReplayToStart,
+    ReplayInProgress
 };
 
 namespace PersistentVars
 {
     enum
     {
-        ReplayStateEnum = 1,
-        ComboIndex = 2,
-        LogDrawingLineNumber = 3, // For GetPersistentInt
-        BacktestStartDateTime = 4,
-        BacktestConfigPtr = 5, // For GetPersistentPointer
-        CombinationsPtr = 6,   // For GetPersistentPointer
-        LoggingPtr = 7,        // For GetPersistentPointer
-        LogMessagesPtr = 8,    // For GetPersistentPointer
-        EnableLog = 9,
-        EnableShowLogOnChart = 10,
-        MaxLogLines = 11,
+        ReplayStateEnum,
+        ComboIndex,
+        LogDrawingLineNumber, // For GetPersistentInt
+        BacktestStartDateTime,
+        BacktestConfigPtr, // For GetPersistentPointer
+        CombinationsPtr,   // For GetPersistentPointer
+        LoggingPtr,        // For GetPersistentPointer
+        LogMessagesPtr,    // For GetPersistentPointer
+        EnableLog,
+        EnableShowLogOnChart,
+        MaxLogLines,
     };
 }
 
@@ -32,9 +32,10 @@ namespace StudyInputs
 {
     enum
     {
-        StartButtonNumber = 0,
-        ResetButtonNumber = 1,
-        ConfigFilePath = 2,
+        StartButtonNumber,
+        ResetButtonNumber,
+        VerifyConfigButtonNumber,
+        ConfigFilePath,
     };
 }
 
@@ -42,6 +43,6 @@ namespace Subgraphs
 {
     enum
     {
-        LogText = 0
+        LogText
     };
 }
