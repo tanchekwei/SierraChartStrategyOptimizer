@@ -46,7 +46,7 @@ The "Reset / Stop" button allows you to clear the current state and stop replay.
     *   In the **Chart Studies** window, select the **Strategy Optimizer** study and go to its **Settings**.
     *   Locate the **Config File Path** input. This is where you will specify the path to your configuration file. The default is `C:\SierraChart\Data\StrategyOptimizerConfig.json`.
 5.  **Create and Configure the JSON file**:
-    *   Find the `StrategyOptimizerConfig.example.json` file in the repository.
+    *   Find the [`StrategyOptimizerConfig.example.json`](https://github.com/tanchekwei/SierraChartStrategyOptimizer/blob/main/StrategyOptimizerConfig.example.json) file in the repository.
     *   Make a copy of this file and rename it to `StrategyOptimizerConfig.json` in your Sierra Chart `Data` directory.
     *   Open `StrategyOptimizerConfig.json` and update it for your backtesting needs. Refer to the **JSON Configuration Example** section below for details.
 6.  **Link Your Strategy**:
@@ -160,21 +160,21 @@ For example, to test different combinations of `Profit Target (In: 4)`, `ATR Mul
 "paramConfigs": [
     {
         "type": "int",
-        "index": 0,
+        "index": 3,
         "min": 10,
         "max": 50,
         "increment": 10
     },
     {
         "type": "float",
-        "index": 0,
+        "index": 6,
         "min": 1,
         "max": 2,
         "increment": 0.5
     },
     {
         "type": "bool",
-        "index": 0,
+        "index": 9,
         "min": 0,
         "max": 1,
         "increment": 1
@@ -191,8 +191,8 @@ If you find this Strategy Optimizer useful, please consider giving the repositor
 After the optimization process completes, the optimizer generates a set of report files. If `openResultsFolder` is set to `true` in your configuration, the folder containing these reports will open automatically.
 
 Each optimization run creates a new folder named with a timestamp. Inside this folder, you will find:
--   **A subfolder for each parameter combination tested.**
--   **A `summary.csv` file.**
+-   **A json and csv file for each parameter combination tested.**
+-   **A `...summary.csv` file.**
 
 ### Summary Report
 The `summary.csv` file provides a high-level overview of all the backtest runs, with each row representing a different parameter combination. The results are sorted by `Total P/L`, allowing you to quickly identify the best-performing settings. Key columns include:
