@@ -117,10 +117,13 @@ void HandleSetDefaults(SCStudyInterfaceRef sc)
 void HandleFullRecalculation(SCStudyInterfaceRef sc)
 {
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start Strategy Optimizer");
+    sc.SetCustomStudyControlBarButtonText(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start Strategy Optimizer");
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop Strategy Optimizer");
+    sc.SetCustomStudyControlBarButtonText(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop Strategy Optimizer");
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify Strategy Optimizer Configuration");
+    sc.SetCustomStudyControlBarButtonText(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify Config");
 }
 

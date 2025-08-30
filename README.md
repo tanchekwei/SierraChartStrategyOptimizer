@@ -146,7 +146,7 @@ The `paramConfigs` array is where you define which inputs of your strategy you w
 To find the correct `index` for an input:
 1.  Open the **Chart Studies** window (`F6`).
 2.  Select your strategy study and click **Settings**.
-3.  In the **Inputs** tab, look for the text next to each input name, which looks like `(In: X)`, where `X` is the input number.
+3.  In the **Inputs** tab, look for the text next to each input name, which looks like `(ln: X)`, where `X` is the input number.
 
 ![alt text](images/InputIndex.png)
 
@@ -154,7 +154,7 @@ To find the correct `index` for an input:
     
     `index = X - 1`
 
-For example, to test different combinations of `Profit Target (In: 4)`, `ATR Multipler (In: 7)`, `Enable Short (In: 10), your `paramConfigs` array would have three objects:
+For example, to test different combinations of `Profit Target (ln: 4)`, `ATR Multipler (ln: 7)`, `Enable Short (ln: 10), your `paramConfigs` array would have three objects:
 
 ```json
 "paramConfigs": [

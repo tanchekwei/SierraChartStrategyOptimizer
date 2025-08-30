@@ -132,6 +132,7 @@ namespace StrategyOptimizerHelpers
         {
             OnChartLogging::AddLog(sc, "No combinations generated, cannot set study inputs.");
         }
+        OnChartLogging::AddLog(sc, "--- Verify config finished. ---");
     }
 
     void HandleResetEvent(SCStudyInterfaceRef sc, ReplayState &replayState, int &ComboIndex, StrategyOptimizerConfig *config, std::vector<std::vector<double>> *combinations, Logging *logging)
