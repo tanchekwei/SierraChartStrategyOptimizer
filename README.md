@@ -1,5 +1,4 @@
 # Sierra Chart ACSIL Strategy Optimizer
-![alt text](images/image.png)
 ![alt text](images/Report.png)
 ## Features
 
