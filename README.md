@@ -68,50 +68,45 @@ The "Reset / Stop" button allows you to clear the current state and stop the opt
 
 To stop the optimization process entirely, you must use the **Reset / Stop** button (**CS9**). If you click the "Stop" button in the Sierra Chart replay window, the optimizer will simply move on to the next combination. The **Reset / Stop** button ensures that the entire process is halted and the optimizer's state is cleared.
 
-## JSON Configuration Example
+## JSON Configuration
 
-Here is an example of a generated configuration file.
+| Property                          | Type    | Description                                                                                                                              |
+| --------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `_customStudyFileAndFunctionName` | string  | **For display purposes only.** The name of the custom study file and function.                                                           |
+| `openResultsFolder`               | boolean | If `true`, the folder containing the optimization results will be opened automatically when the process is complete.                       |
+| `replayConfig`                    | object  | An object containing settings for the chart replay.                                                                                      |
+| `logConfig`                       | object  | An object containing settings for the on-chart logger.                                                                                   |
+| `paramConfigs`                    | array   | An array of objects, where each object defines a parameter to be optimized.                                                              |
 
-```json
-{
-    "_customStudyFileAndFunctionName": "VolumeSpikeStrategy_250830_2320_release.scsf_VolumeSpikeStrategy",
-    "openResultsFolder": true,
-    "replayConfig": {
-        "replaySpeed": 15360,
-        "startDate": "2025-08-29",
-        "startTime": "00:00:00.000",
-        "replayMode": 2,
-        "chartsToReplay": 0,
-        "clearExistingTradeSimulationDataForSymbolAndTradeAccount": 1
-    },
-    "logConfig": {
-        "enableLog": true,
-        "enableShowLogOnChart": true,
-        "maxLogLines": 25
-    },
-    "paramConfigs": [
-        {
-            "_name": "Enable Trading",
-            "index": 0,
-            "type": "bool",
-            "min": 1,
-            "max": 1,
-            "increment": 0
-        },
-        {
-            "_name": "Enable Long Trades",
-            "index": 1,
-            "type": "bool",
-            "min": 1,
-            "max": 1,
-            "increment": 0
-        }
-    ]
-}
-```
--   **`_customStudyFileAndFunctionName`**: For display purposes only.
--   **`_name`**: (For display purposes only) The name of the input.
--   **`increment`**: If set to `0`, the parameter will be fixed and not optimized.
+### `replayConfig`
+
+| Property                                      | Type    | Description                                                                                                                                                                |
+| --------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `replaySpeed`                                 | number  | The speed of the chart replay.                                                                                                                                             |
+| `startDate`                                   | string  | The start date for the replay, in `YYYY-MM-DD` format.                                                                                                                     |
+| `startTime`                                   | string  | The start time for the replay, in `HH:MM:SS.sss` format.                                                                                                                   |
+| `replayMode`                                  | number  | The replay mode. Possible values: `1` (Standard), `2` (Accurate Trading System Back Test), `3` (Calculate at Every Tick), `4` (Calculate Same as Real-Time).                 |
+| `chartsToReplay`                              | number  | The charts to replay. Possible values: `0` (Single Chart), `1` (All Charts in Chartbook), `2` (Charts with Same Link Number).                                               |
+| `clearExistingTradeSimulationDataForSymbolAndTradeAccount` | number  | If set to `1`, any existing trade simulation data for the symbol and trade account will be cleared before the replay starts.                                        |
+
+### `logConfig`
+
+| Property               | Type    | Description                                                                 |
+| ---------------------- | ------- | --------------------------------------------------------------------------- |
+| `enableLog`            | boolean | If `true`, logging will be enabled.                                         |
+| `enableShowLogOnChart` | boolean | If `true`, log messages will be displayed directly on the chart.              |
+| `maxLogLines`          | number  | The maximum number of log lines to display on the chart.                    |
+
+### `paramConfigs`
+
+| Property    | Type   | Description                                                                                                |
+| ----------- | ------ | ---------------------------------------------------------------------------------------------------------- |
+| `_name`     | string | **For display purposes only.** The name of the input as it appears in the study's settings.                  |
+| `index`     | number | The zero-based index of the study input.                                                                   |
+| `type`      | string | The data type of the input. Possible values: `int`, `float`, `bool`.                                       |
+| `min`       | number | The minimum value to be tested for this parameter.                                                         |
+| `max`       | number | The maximum value to be tested for this parameter.                                                         |
+| `increment` | number | The amount to increment the value between `min` and `max`. If `0`, the parameter will be fixed at `min`. |
 
 ## Support the Project
 
