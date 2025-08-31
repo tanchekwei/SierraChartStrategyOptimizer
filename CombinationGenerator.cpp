@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 #include <vector>
+#include <cmath>
 #include "ConfigManager.hpp"
 #include "CombinationGenerator.hpp"
 
@@ -19,12 +20,34 @@ namespace CombinationGenerator
             return;
         }
 
-        for (double i = params[k].MinValue; i <= params[k].MaxValue; i += params[k].Increment)
-        {
-            current_combination.push_back(i);
+        const auto& param = params[k];
 
-            GenerateCombinations(k + 1, combinations, current_combination, params);
-            current_combination.pop_back();
+        if (std::fabs(param.Increment) < 1e-9)
+        {
+            if (param.MinValue <= param.MaxValue)
+            {
+                current_combination.push_back(param.MinValue);
+                GenerateCombinations(k + 1, combinations, current_combination, params);
+                current_combination.pop_back();
+            }
+        }
+        else if (param.Increment > 0)
+        {
+            for (double i = param.MinValue; i <= param.MaxValue + 1e-9; i += param.Increment)
+            {
+                current_combination.push_back(i);
+                GenerateCombinations(k + 1, combinations, current_combination, params);
+                current_combination.pop_back();
+            }
+        }
+        else // param.Increment < 0
+        {
+             for (double i = param.MinValue; i >= param.MaxValue - 1e-9; i += param.Increment)
+            {
+                current_combination.push_back(i);
+                GenerateCombinations(k + 1, combinations, current_combination, params);
+                current_combination.pop_back();
+            }
         }
     }
 

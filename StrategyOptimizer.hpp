@@ -14,6 +14,7 @@ namespace StrategyOptimizerHelpers
     void HandleStartEvent(SCStudyInterfaceRef sc, SCInputRef Input_ConfigFilePath, StrategyOptimizerConfig* config, std::vector<std::vector<double>>* combinations, ReplayState& replayState, int& ComboIndex);
     void HandleResetEvent(SCStudyInterfaceRef sc, ReplayState& replayState, int& ComboIndex, StrategyOptimizerConfig* config, std::vector<std::vector<double>>* combinations, Logging* logging);
     void HandleVerifyConfigEvent(SCStudyInterfaceRef sc, SCInputRef Input_ConfigFilePath, StrategyOptimizerConfig *config, std::vector<std::vector<double>> *combinations);
+    void HandleGenerateConfigEvent(SCStudyInterfaceRef sc);
 }
 
 #endif

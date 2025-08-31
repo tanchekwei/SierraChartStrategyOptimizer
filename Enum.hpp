@@ -32,10 +32,12 @@ namespace StudyInputs
 {
     enum
     {
+        GenerateConfigButtonNumber,
         StartButtonNumber,
         ResetButtonNumber,
         VerifyConfigButtonNumber,
         ConfigFilePath,
+        TargetStudyRef
     };
 }
 

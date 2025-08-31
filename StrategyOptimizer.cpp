@@ -96,35 +96,52 @@ void HandleSetDefaults(SCStudyInterfaceRef sc)
     sc.Subgraph[Subgraphs::LogText].PrimaryColor = RGB(255, 255, 255);
     sc.Subgraph[Subgraphs::LogText].LineWidth = 10; // Used for font size
 
+    sc.Input[StudyInputs::GenerateConfigButtonNumber].Name = "Generate Config Button Number";
+    sc.Input[StudyInputs::GenerateConfigButtonNumber].SetInt(6);
+    sc.Input[StudyInputs::GenerateConfigButtonNumber].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
+
     sc.Input[StudyInputs::VerifyConfigButtonNumber].Name = "Verify Config Button Number";
-    sc.Input[StudyInputs::VerifyConfigButtonNumber].SetInt(6);
+    sc.Input[StudyInputs::VerifyConfigButtonNumber].SetInt(7);
     sc.Input[StudyInputs::VerifyConfigButtonNumber].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
 
     sc.Input[StudyInputs::StartButtonNumber].Name = "Start Button Number";
-    sc.Input[StudyInputs::StartButtonNumber].SetInt(7);
+    sc.Input[StudyInputs::StartButtonNumber].SetInt(8);
     sc.Input[StudyInputs::StartButtonNumber].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
 
     sc.Input[StudyInputs::ResetButtonNumber].Name = "Reset Button Number";
-    sc.Input[StudyInputs::ResetButtonNumber].SetInt(8);
+    sc.Input[StudyInputs::ResetButtonNumber].SetInt(9);
     sc.Input[StudyInputs::ResetButtonNumber].SetIntLimits(1, MAX_ACS_CONTROL_BAR_BUTTONS);
 
     sc.Input[StudyInputs::ConfigFilePath].Name = "Config File Path";
     sc.Input[StudyInputs::ConfigFilePath].SetString("C:\\SierraChart\\Data\\StrategyOptimizerConfig.json");
+
+    sc.Input[StudyInputs::TargetStudyRef].Name = "Target Study";
+    sc.Input[StudyInputs::TargetStudyRef].SetStudySubgraphValues(0, 0);
 
     OnChartLogging::AddLog(sc, "Strategy Optimizer defaults set.");
 }
 
 void HandleFullRecalculation(SCStudyInterfaceRef sc)
 {
+    sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::GenerateConfigButtonNumber].GetInt(), "Generate Strategy Optimizer Configuration");
+    sc.SetCustomStudyControlBarButtonText(sc.Input[StudyInputs::GenerateConfigButtonNumber].GetInt(), "Generate");
+    sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::GenerateConfigButtonNumber].GetInt(), "Generate Config");
+    sc.SetCustomStudyControlBarButtonColor(sc.Input[StudyInputs::GenerateConfigButtonNumber].GetInt(), RGB(0, 0, 255)); // Blue
+
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start Strategy Optimizer");
     sc.SetCustomStudyControlBarButtonText(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::StartButtonNumber].GetInt(), "Start Strategy Optimizer");
+    sc.SetCustomStudyControlBarButtonColor(sc.Input[StudyInputs::StartButtonNumber].GetInt(), RGB(0, 255, 0)); // Green
+
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop Strategy Optimizer");
     sc.SetCustomStudyControlBarButtonText(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop Strategy Optimizer");
+    sc.SetCustomStudyControlBarButtonColor(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), RGB(255, 255, 0)); // Yellow
+
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify Strategy Optimizer Configuration");
     sc.SetCustomStudyControlBarButtonText(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify Config");
+    sc.SetCustomStudyControlBarButtonColor(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), RGB(255, 0, 0)); // Red
 }
 
 bool HandleReplayLogic(SCStudyInterfaceRef sc)
@@ -228,6 +245,7 @@ void HandleMenuEvents(SCStudyInterfaceRef sc)
     SCInputRef Input_Start = sc.Input[StudyInputs::StartButtonNumber];
     SCInputRef Input_Reset = sc.Input[StudyInputs::ResetButtonNumber];
     SCInputRef Input_VerifyConfig = sc.Input[StudyInputs::VerifyConfigButtonNumber];
+    SCInputRef Input_GenerateConfig = sc.Input[StudyInputs::GenerateConfigButtonNumber];
     SCInputRef Input_ConfigFilePath = sc.Input[StudyInputs::ConfigFilePath];
 
     ReplayState &replayState = reinterpret_cast<ReplayState &>(sc.GetPersistentIntFast(PersistentVars::ReplayStateEnum));
@@ -258,5 +276,10 @@ void HandleMenuEvents(SCStudyInterfaceRef sc)
     {
         StrategyOptimizerHelpers::HandleVerifyConfigEvent(sc, Input_ConfigFilePath, config, combinations);
         ReplayManager::ResetButton(sc, Input_VerifyConfig);
+    }
+    else if (sc.MenuEventID == Input_GenerateConfig.GetInt())
+    {
+        StrategyOptimizerHelpers::HandleGenerateConfigEvent(sc);
+        ReplayManager::ResetButton(sc, Input_GenerateConfig);
     }
 }

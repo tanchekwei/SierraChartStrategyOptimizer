@@ -26,10 +26,13 @@ namespace ReplayManager
                 break;
             case InputType::INT:
             case InputType::BOOL:
-            default:
                 msg.Format("  Input '%s' (Index %d) set to Value: %d", inputName.GetChars(), paramConfigs[i].Index, static_cast<int>(combo[i]));
                 OnChartLogging::AddLog(sc, msg);
                 sc.SetChartStudyInputInt(sc.ChartNumber, studyID, paramConfigs[i].Index, static_cast<int>(combo[i]));
+                break;
+            default:
+                msg.Format("  Input '%s' (Index %d) unsupported, skipped", inputName.GetChars(), paramConfigs[i].Index);
+                OnChartLogging::AddLog(sc, msg);
                 break;
             }
         }
