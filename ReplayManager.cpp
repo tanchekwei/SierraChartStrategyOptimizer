@@ -112,7 +112,7 @@ namespace ReplayManager
             OnChartLogging::AddLog(sc, "No combinations provided to set study inputs.");
             return;
         }
-        
+
         // For verification, we display the inputs of the first combination.
         SetStudyInputsInternal(sc, studyID, combinations, config.ParamConfigs);
     }

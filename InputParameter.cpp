@@ -170,37 +170,65 @@ std::vector<std::pair<std::string, std::string>> InputParameter::GetParameters(S
     return params;
 }
 
-const char* InputParameter::InputValueTypeToString(int inputType)
+const char *InputParameter::InputValueTypeToString(int inputType)
 {
     switch (inputType)
     {
-    case NO_VALUE: return "NO_VALUE";
-    case OHLC_VALUE: return "OHLC_VALUE";
-    case FLOAT_VALUE: return "FLOAT_VALUE";
-    case STUDYINDEX_VALUE: return "STUDYINDEX_VALUE";
-    case SUBGRAPHINDEX_VALUE: return "SUBGRAPHINDEX_VALUE";
-    case YESNO_VALUE: return "YESNO_VALUE";
-    case MOVAVGTYPE_VALUE: return "MOVAVGTYPE_VALUE";
-    case DATE_VALUE: return "DATE_VALUE";
-    case TIME_VALUE: return "TIME_VALUE";
-    case DATETIME_VALUE: return "DATETIME_VALUE";
-    case INT_VALUE: return "INT_VALUE";
-    case STUDYID_VALUE: return "STUDYID_VALUE";
-    case COLOR_VALUE: return "COLOR_VALUE";
-    case ALERT_SOUND_NUMBER_VALUE: return "ALERT_SOUND_NUMBER_VALUE";
-    case CANDLESTICK_PATTERNS_VALUE: return "CANDLESTICK_PATTERNS_VALUE";
-    case TIME_PERIOD_LENGTH_UNIT_VALUE: return "TIME_PERIOD_LENGTH_UNIT_VALUE";
-    case CHART_STUDY_SUBGRAPH_VALUES: return "CHART_STUDY_SUBGRAPH_VALUES";
-    case CHART_NUMBER: return "CHART_NUMBER";
-    case STUDY_SUBGRAPH_VALUES: return "STUDY_SUBGRAPH_VALUES";
-    case CHART_STUDY_VALUES: return "CHART_STUDY_VALUES";
-    case CUSTOM_STRING_VALUE: return "CUSTOM_STRING_VALUE";
-    case DOUBLE_VALUE: return "DOUBLE_VALUE";
-    case TIMEZONE_VALUE: return "TIMEZONE_VALUE";
-    case TIME_WITH_TIMEZONE_VALUE: return "TIME_WITH_TIMEZONE_VALUE";
-    case STRING_VALUE: return "STRING_VALUE";
-    case PATH_AND_FILE_NAME_VALUE: return "PATH_AND_FILE_NAME_VALUE";
-    case FIND_SYMBOL_VALUE: return "FIND_SYMBOL_VALUE";
-    default: return "UNKNOWN_VALUE";
+    case NO_VALUE:
+        return "NO_VALUE";
+    case OHLC_VALUE:
+        return "OHLC_VALUE";
+    case FLOAT_VALUE:
+        return "FLOAT_VALUE";
+    case STUDYINDEX_VALUE:
+        return "STUDYINDEX_VALUE";
+    case SUBGRAPHINDEX_VALUE:
+        return "SUBGRAPHINDEX_VALUE";
+    case YESNO_VALUE:
+        return "YESNO_VALUE";
+    case MOVAVGTYPE_VALUE:
+        return "MOVAVGTYPE_VALUE";
+    case DATE_VALUE:
+        return "DATE_VALUE";
+    case TIME_VALUE:
+        return "TIME_VALUE";
+    case DATETIME_VALUE:
+        return "DATETIME_VALUE";
+    case INT_VALUE:
+        return "INT_VALUE";
+    case STUDYID_VALUE:
+        return "STUDYID_VALUE";
+    case COLOR_VALUE:
+        return "COLOR_VALUE";
+    case ALERT_SOUND_NUMBER_VALUE:
+        return "ALERT_SOUND_NUMBER_VALUE";
+    case CANDLESTICK_PATTERNS_VALUE:
+        return "CANDLESTICK_PATTERNS_VALUE";
+    case TIME_PERIOD_LENGTH_UNIT_VALUE:
+        return "TIME_PERIOD_LENGTH_UNIT_VALUE";
+    case CHART_STUDY_SUBGRAPH_VALUES:
+        return "CHART_STUDY_SUBGRAPH_VALUES";
+    case CHART_NUMBER:
+        return "CHART_NUMBER";
+    case STUDY_SUBGRAPH_VALUES:
+        return "STUDY_SUBGRAPH_VALUES";
+    case CHART_STUDY_VALUES:
+        return "CHART_STUDY_VALUES";
+    case CUSTOM_STRING_VALUE:
+        return "CUSTOM_STRING_VALUE";
+    case DOUBLE_VALUE:
+        return "DOUBLE_VALUE";
+    case TIMEZONE_VALUE:
+        return "TIMEZONE_VALUE";
+    case TIME_WITH_TIMEZONE_VALUE:
+        return "TIME_WITH_TIMEZONE_VALUE";
+    case STRING_VALUE:
+        return "STRING_VALUE";
+    case PATH_AND_FILE_NAME_VALUE:
+        return "PATH_AND_FILE_NAME_VALUE";
+    case FIND_SYMBOL_VALUE:
+        return "FIND_SYMBOL_VALUE";
+    default:
+        return "UNKNOWN_VALUE";
     }
 }

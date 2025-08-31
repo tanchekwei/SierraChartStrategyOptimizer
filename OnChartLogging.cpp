@@ -17,7 +17,7 @@ namespace OnChartLogging
         return logMessages;
     }
 
-    void AddLog(SCStudyInterfaceRef sc, const SCString &message, const SCString& fontFace)
+    void AddLog(SCStudyInterfaceRef sc, const SCString &message, const SCString &fontFace)
     {
         int &enableLog = sc.GetPersistentIntFast(PersistentVars::EnableLog);
         if (enableLog == 0)
@@ -39,7 +39,7 @@ namespace OnChartLogging
         }
     }
 
-    void DrawLogs(SCStudyInterfaceRef sc, const SCString& fontFace)
+    void DrawLogs(SCStudyInterfaceRef sc, const SCString &fontFace)
     {
         int &textDrawingLineNumber = sc.GetPersistentIntFast(PersistentVars::LogDrawingLineNumber);
         auto *logMessages = GetLogMessagesVector(sc);

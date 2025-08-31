@@ -4,28 +4,34 @@
 #include "ReportGenerator.hpp"
 #include <sstream>
 
-void ReportGenerator::WriteSummaryHeader(std::ofstream& log, const std::string& strategyName, const std::string& dllName, const std::vector<std::pair<std::string, double>>& params) {
+void ReportGenerator::WriteSummaryHeader(std::ofstream &log, const std::string &strategyName, const std::string &dllName, const std::vector<std::pair<std::string, double>> &params)
+{
     log << "Strategy,DLL Name,";
-    for (const auto& p : params) {
+    for (const auto &p : params)
+    {
         log << p.first << ",";
     }
     log << "\n"
         << strategyName << "," << dllName << ",";
-    for (const auto& p : params) {
+    for (const auto &p : params)
+    {
         log << p.second << ",";
     }
     log << "\n\n";
 }
 
-void ReportGenerator::WriteTradesData(SCStudyInterfaceRef sc, std::ofstream& log) {
+void ReportGenerator::WriteTradesData(SCStudyInterfaceRef sc, std::ofstream &log)
+{
     log << "\n";
     log << "OpenDateTime,CloseDateTime,TradeType,TradeQuantity,MaxClosedQuantity,MaxOpenQuantity,EntryPrice,ExitPrice,TradeProfitLoss,MaximumOpenPositionLoss,MaximumOpenPositionProfit,FlatToFlatMaximumOpenPositionProfit,FlatToFlatMaximumOpenPositionLoss,Commission,IsTradeClosed,Note\n";
 
     int tradeListSize = sc.GetTradeListSize();
-    for (int i = 0; i < tradeListSize; ++i) {
+    for (int i = 0; i < tradeListSize; ++i)
+    {
         s_ACSTrade trade;
         sc.GetTradeListEntry(i, trade);
-        if (trade.IsTradeClosed) {
+        if (trade.IsTradeClosed)
+        {
             std::stringstream ss;
             ss << sc.DateTimeToString(trade.OpenDateTime, FLAG_DT_COMPLETE_DATETIME)
                << "," << sc.DateTimeToString(trade.CloseDateTime, FLAG_DT_COMPLETE_DATETIME)
@@ -48,7 +54,8 @@ void ReportGenerator::WriteTradesData(SCStudyInterfaceRef sc, std::ofstream& log
     }
 }
 
-void ReportGenerator::WriteTradeStatisticsV2(SCStudyInterfaceRef sc, std::ofstream& log) {
+void ReportGenerator::WriteTradeStatisticsV2(SCStudyInterfaceRef sc, std::ofstream &log)
+{
     log << "\n\n--- Trade Statistics V2 ---\n";
     log << "Statistic,All Trades,Long Trades,Short Trades\n";
 
@@ -139,13 +146,16 @@ void ReportGenerator::WriteTradeStatisticsV2(SCStudyInterfaceRef sc, std::ofstre
     log << "ClosedFlatToFlatTradesProfitLoss," << allStats.ClosedFlatToFlatTradesProfitLoss << "," << longStats.ClosedFlatToFlatTradesProfitLoss << "," << shortStats.ClosedFlatToFlatTradesProfitLoss << "\n";
 }
 
-json ReportGenerator::GetTradesData(SCStudyInterfaceRef sc) {
+json ReportGenerator::GetTradesData(SCStudyInterfaceRef sc)
+{
     json tradesData = json::array();
     int tradeListSize = sc.GetTradeListSize();
-    for (int i = 0; i < tradeListSize; ++i) {
+    for (int i = 0; i < tradeListSize; ++i)
+    {
         s_ACSTrade trade;
         sc.GetTradeListEntry(i, trade);
-        if (trade.IsTradeClosed) {
+        if (trade.IsTradeClosed)
+        {
             json tradeData;
             tradeData["OpenDateTime"] = sc.DateTimeToString(trade.OpenDateTime, FLAG_DT_COMPLETE_DATETIME).GetChars();
             tradeData["CloseDateTime"] = sc.DateTimeToString(trade.CloseDateTime, FLAG_DT_COMPLETE_DATETIME).GetChars();
@@ -170,7 +180,8 @@ json ReportGenerator::GetTradesData(SCStudyInterfaceRef sc) {
 }
 
 template <typename T>
-nlohmann::json MakeTradeStats(SCStudyInterfaceRef sc, const T& stats) {
+nlohmann::json MakeTradeStats(SCStudyInterfaceRef sc, const T &stats)
+{
     return {
         {"ClosedTradesProfitLoss", stats.ClosedTradesProfitLoss},
         {"ClosedTradesTotalProfit", stats.ClosedTradesTotalProfit},
@@ -251,11 +262,11 @@ nlohmann::json MakeTradeStats(SCStudyInterfaceRef sc, const T& stats) {
         {"LastExitDateTime", sc.DateTimeToString(stats.LastExitDateTime, FLAG_DT_COMPLETE_DATETIME).GetChars()},
         {"TotalBuyQuantity", stats.TotalBuyQuantity},
         {"TotalSellQuantity", stats.TotalSellQuantity},
-        {"ClosedFlatToFlatTradesProfitLoss", stats.ClosedFlatToFlatTradesProfitLoss}
-    };
+        {"ClosedFlatToFlatTradesProfitLoss", stats.ClosedFlatToFlatTradesProfitLoss}};
 }
 
-json ReportGenerator::GetTradeStatistics(SCStudyInterfaceRef sc) {
+json ReportGenerator::GetTradeStatistics(SCStudyInterfaceRef sc)
+{
     json tradeStatistics;
     n_ACSIL::s_TradeStatistics allStats, longStats, shortStats;
     sc.GetTradeStatisticsForSymbolV2(n_ACSIL::STATS_TYPE_ALL_TRADES, allStats);
@@ -267,9 +278,11 @@ json ReportGenerator::GetTradeStatistics(SCStudyInterfaceRef sc) {
     return tradeStatistics;
 }
 
-json ReportGenerator::GetCombination(const std::vector<std::pair<std::string, double>>& params) {
+json ReportGenerator::GetCombination(const std::vector<std::pair<std::string, double>> &params)
+{
     json combination;
-    for (const auto& p : params) {
+    for (const auto &p : params)
+    {
         combination[p.first] = p.second;
     }
     return combination;

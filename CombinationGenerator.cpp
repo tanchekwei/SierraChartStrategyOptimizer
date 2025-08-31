@@ -20,7 +20,7 @@ namespace CombinationGenerator
             return;
         }
 
-        const auto& param = params[k];
+        const auto &param = params[k];
 
         if (std::fabs(param.Increment) < 1e-9)
         {
@@ -42,7 +42,7 @@ namespace CombinationGenerator
         }
         else // param.Increment < 0
         {
-             for (double i = param.MinValue; i >= param.MaxValue - 1e-9; i += param.Increment)
+            for (double i = param.MinValue; i >= param.MaxValue - 1e-9; i += param.Increment)
             {
                 current_combination.push_back(i);
                 GenerateCombinations(k + 1, combinations, current_combination, params);
@@ -59,19 +59,23 @@ namespace CombinationGenerator
         return combinations;
     }
 
-    std::vector<std::vector<double>> GenerateIterative(const std::vector<InputConfig>& params)
+    std::vector<std::vector<double>> GenerateIterative(const std::vector<InputConfig> &params)
     {
         std::vector<std::vector<double>> combinations;
         std::vector<InputConfig> varyingParams;
-        for(const auto& p : params) {
-            if (std::fabs(p.Increment) > 1e-9) {
+        for (const auto &p : params)
+        {
+            if (std::fabs(p.Increment) > 1e-9)
+            {
                 varyingParams.push_back(p);
             }
         }
 
-        if (varyingParams.empty()) {
-            if (!params.empty()) {
-                 combinations.push_back({});
+        if (varyingParams.empty())
+        {
+            if (!params.empty())
+            {
+                combinations.push_back({});
             }
             return combinations;
         }
@@ -80,38 +84,49 @@ namespace CombinationGenerator
         std::vector<size_t> p_indices(varyingParams.size(), 0);
         std::vector<std::vector<double>> paramValues;
 
-        for(const auto& p : varyingParams) {
+        for (const auto &p : varyingParams)
+        {
             std::vector<double> values;
-            if (p.Increment > 0) {
-                for (double i = p.MinValue; i <= p.MaxValue + 1e-9; i += p.Increment) {
+            if (p.Increment > 0)
+            {
+                for (double i = p.MinValue; i <= p.MaxValue + 1e-9; i += p.Increment)
+                {
                     values.push_back(i);
                 }
-            } else {
-                for (double i = p.MinValue; i >= p.MaxValue - 1e-9; i += p.Increment) {
+            }
+            else
+            {
+                for (double i = p.MinValue; i >= p.MaxValue - 1e-9; i += p.Increment)
+                {
                     values.push_back(i);
                 }
             }
             paramValues.push_back(values);
         }
 
-        while (true) {
+        while (true)
+        {
             currentCombination.clear();
-            for (size_t i = 0; i < varyingParams.size(); ++i) {
+            for (size_t i = 0; i < varyingParams.size(); ++i)
+            {
                 currentCombination.push_back(paramValues[i][p_indices[i]]);
             }
             combinations.push_back(currentCombination);
 
             int k = varyingParams.size() - 1;
-            while (k >= 0) {
+            while (k >= 0)
+            {
                 p_indices[k]++;
-                if (p_indices[k] < paramValues[k].size()) {
+                if (p_indices[k] < paramValues[k].size())
+                {
                     break;
                 }
                 p_indices[k] = 0;
                 k--;
             }
 
-            if (k < 0) {
+            if (k < 0)
+            {
                 break;
             }
         }

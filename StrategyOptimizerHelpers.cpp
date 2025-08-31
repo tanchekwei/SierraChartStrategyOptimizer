@@ -60,7 +60,7 @@ namespace StrategyOptimizerHelpers
                 OnChartLogging::AddLog(sc, "No varying parameters found.");
                 return;
             }
-            
+
             msg.Format("Generated %d combinations.", (int)combinations->size());
             OnChartLogging::AddLog(sc, msg);
             isConfigLoaded = true;
@@ -108,7 +108,7 @@ namespace StrategyOptimizerHelpers
 
             if (combinations->empty() && !config->ParamConfigs.empty())
             {
-                 combinations->push_back({}); 
+                combinations->push_back({});
             }
 
             msg.Format("Generated %d combinations.", (int)combinations->size());
@@ -126,53 +126,55 @@ namespace StrategyOptimizerHelpers
         }
 
         OnChartLogging::AddLog(sc, "Configuration verified. Input:");
-        
+
         unsigned int studyId = sc.Input[StudyInputs::TargetStudyRef].GetStudyID();
         if (studyId == 0)
         {
-        OnChartLogging::AddLog(sc, "Could not find study to log inputs.");
-        return;
+            OnChartLogging::AddLog(sc, "Could not find study to log inputs.");
+            return;
         }
 
         const SCString fontFace = "Consolas";
         std::stringstream header_ss;
         header_ss << "| " << std::right << std::setw(30) << "Input Name" << "| " << std::left << std::setw(15) << "Value" << "|";
         OnChartLogging::AddLog(sc, SCString(header_ss.str().c_str()), fontFace);
-        
+
         std::stringstream separator_ss;
         separator_ss << "|" << std::string(31, '-') << "|" << std::string(16, '-') << "|";
         OnChartLogging::AddLog(sc, SCString(separator_ss.str().c_str()), fontFace);
 
-        const auto& firstCombination = combinations->empty() ? std::vector<double>() : (*combinations)[0];
+        const auto &firstCombination = combinations->empty() ? std::vector<double>() : (*combinations)[0];
         int varyingParamIndex = 0;
 
-        for (const auto& param : config->ParamConfigs)
+        for (const auto &param : config->ParamConfigs)
         {
             SCString inputName;
             sc.GetStudyInputName(sc.ChartNumber, studyId, param.Index, inputName);
-            if (inputName.IsEmpty()) continue;
+            if (inputName.IsEmpty())
+                continue;
 
             double value;
-            if (std::fabs(param.Increment) > 1e-9) 
+            if (std::fabs(param.Increment) > 1e-9)
             {
                 if (varyingParamIndex < firstCombination.size())
                 {
                     value = firstCombination[varyingParamIndex];
                     varyingParamIndex++;
                 }
-                else continue; 
+                else
+                    continue;
             }
-            else 
+            else
             {
                 value = param.MinValue;
             }
 
             std::stringstream ss;
-            ss << "| " << std::right << std::setw(30) << inputName.GetChars() 
+            ss << "| " << std::right << std::setw(30) << inputName.GetChars()
                << "| " << std::left << std::setw(15) << value << "|";
             OnChartLogging::AddLog(sc, SCString(ss.str().c_str()), fontFace);
         }
-        
+
         OnChartLogging::AddLog(sc, "--- Verify config finished. ---");
     }
 

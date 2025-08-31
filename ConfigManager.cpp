@@ -83,7 +83,7 @@ namespace
                 {
                     continue;
                 }
-                
+
                 InputType type = InputType::INT; // Default to INT
                 if (input.contains("type"))
                 {
