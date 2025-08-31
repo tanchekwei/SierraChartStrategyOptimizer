@@ -54,8 +54,6 @@ The "Reset / Stop" button allows you to clear the current state and stop the opt
     *   **Start (CS8)**: Begins the full backtesting and optimization process.
     *   **Reset / Stop (CS9)**: Clears the current state of the optimizer.
 
-    ![ACS6 or ACS7](images/Button.png)
-
 6.  **Generate Configuration**:
     *   Click the **CS6** (Generate) button on your control bar.
     *   This will create a new JSON configuration file in the `StrategyOptimizerGeneratedConfig` folder inside your Sierra Chart `Data` directory.
