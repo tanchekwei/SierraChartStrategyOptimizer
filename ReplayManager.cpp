@@ -81,10 +81,10 @@ namespace ReplayManager
         OnChartLogging::AddLog(sc, msg);
 
         const auto &currentCombo = combinations[comboIndex];
-        int studyID = sc.GetStudyIDByName(sc.ChartNumber, config.CustomStudyShortName.c_str(), 1);
+        unsigned int studyID = sc.Input[StudyInputs::TargetStudyRef].GetStudyID();
         if (studyID == 0)
         {
-            msg.Format("Error: Failed to find study with short name=%s", config.CustomStudyShortName.c_str());
+            msg.Format("Error: Failed to find study with id=%d", studyID);
             OnChartLogging::AddLog(sc, msg);
             return;
         }
@@ -99,10 +99,10 @@ namespace ReplayManager
     void SetStudyInputs(SCStudyInterfaceRef sc, const StrategyOptimizerConfig &config, const std::vector<double> &combinations)
     {
         SCString msg;
-        int studyID = sc.GetStudyIDByName(sc.ChartNumber, config.CustomStudyShortName.c_str(), 1);
+        unsigned int studyID = sc.Input[StudyInputs::TargetStudyRef].GetStudyID();
         if (studyID == 0)
         {
-            msg.Format("Error: Failed to find study with short name=%s", config.CustomStudyShortName.c_str());
+            msg.Format("Error: Failed to find study with id=%d", studyID);
             OnChartLogging::AddLog(sc, msg);
             return;
         }

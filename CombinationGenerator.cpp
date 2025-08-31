@@ -58,4 +58,64 @@ namespace CombinationGenerator
         GenerateCombinations(0, combinations, current_combination, params);
         return combinations;
     }
+
+    std::vector<std::vector<double>> GenerateIterative(const std::vector<InputConfig>& params)
+    {
+        std::vector<std::vector<double>> combinations;
+        std::vector<InputConfig> varyingParams;
+        for(const auto& p : params) {
+            if (std::fabs(p.Increment) > 1e-9) {
+                varyingParams.push_back(p);
+            }
+        }
+
+        if (varyingParams.empty()) {
+            if (!params.empty()) {
+                 combinations.push_back({});
+            }
+            return combinations;
+        }
+
+        std::vector<double> currentCombination;
+        std::vector<size_t> p_indices(varyingParams.size(), 0);
+        std::vector<std::vector<double>> paramValues;
+
+        for(const auto& p : varyingParams) {
+            std::vector<double> values;
+            if (p.Increment > 0) {
+                for (double i = p.MinValue; i <= p.MaxValue + 1e-9; i += p.Increment) {
+                    values.push_back(i);
+                }
+            } else {
+                for (double i = p.MinValue; i >= p.MaxValue - 1e-9; i += p.Increment) {
+                    values.push_back(i);
+                }
+            }
+            paramValues.push_back(values);
+        }
+
+        while (true) {
+            currentCombination.clear();
+            for (size_t i = 0; i < varyingParams.size(); ++i) {
+                currentCombination.push_back(paramValues[i][p_indices[i]]);
+            }
+            combinations.push_back(currentCombination);
+
+            int k = varyingParams.size() - 1;
+            while (k >= 0) {
+                p_indices[k]++;
+                if (p_indices[k] < paramValues[k].size()) {
+                    break;
+                }
+                p_indices[k] = 0;
+                k--;
+            }
+
+            if (k < 0) {
+                break;
+            }
+        }
+
+        return combinations;
+    }
 }

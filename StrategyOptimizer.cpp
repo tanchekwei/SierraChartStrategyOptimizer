@@ -116,6 +116,7 @@ void HandleSetDefaults(SCStudyInterfaceRef sc)
     sc.Input[StudyInputs::ConfigFilePath].SetString("C:\\SierraChart\\Data\\StrategyOptimizerConfig.json");
 
     sc.Input[StudyInputs::TargetStudyRef].Name = "Target Study";
+    sc.Input[StudyInputs::TargetStudyRef].SetDescription("Only study id (first dropdown) required, subgraph index (second dropdown) values not used)");
     sc.Input[StudyInputs::TargetStudyRef].SetStudySubgraphValues(0, 0);
 
     OnChartLogging::AddLog(sc, "Strategy Optimizer defaults set.");
@@ -136,12 +137,12 @@ void HandleFullRecalculation(SCStudyInterfaceRef sc)
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop Strategy Optimizer");
     sc.SetCustomStudyControlBarButtonText(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), "Reset / Stop Strategy Optimizer");
-    sc.SetCustomStudyControlBarButtonColor(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), RGB(255, 255, 0)); // Yellow
+    sc.SetCustomStudyControlBarButtonColor(sc.Input[StudyInputs::ResetButtonNumber].GetInt(), RGB(255, 0, 0)); // Red
 
     sc.SetCustomStudyControlBarButtonHoverText(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify Strategy Optimizer Configuration");
     sc.SetCustomStudyControlBarButtonText(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify");
     sc.SetCustomStudyControlBarButtonShortCaption(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), "Verify Config");
-    sc.SetCustomStudyControlBarButtonColor(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), RGB(255, 0, 0)); // Red
+    sc.SetCustomStudyControlBarButtonColor(sc.Input[StudyInputs::VerifyConfigButtonNumber].GetInt(), RGB(255, 255, 0)); // Yellow
 }
 
 bool HandleReplayLogic(SCStudyInterfaceRef sc)
@@ -191,7 +192,7 @@ void HandleReplayCompletion(SCStudyInterfaceRef sc)
     OnChartLogging::AddLog(sc, msg);
 
     const auto &currentCombo = (*combinations)[comboIndex];
-    int studyID = sc.GetStudyIDByName(sc.ChartNumber, config->CustomStudyShortName.c_str(), 1);
+    unsigned int studyID = sc.Input[StudyInputs::TargetStudyRef].GetStudyID();
     std::vector<std::pair<std::string, double>> params;
 
     std::stringstream paramStream;
@@ -209,15 +210,18 @@ void HandleReplayCompletion(SCStudyInterfaceRef sc)
     std::replace(startDateTimeString.begin(), startDateTimeString.end(), ':', '-');
     std::replace(startDateTimeString.begin(), startDateTimeString.end(), ' ', '_');
 
+    n_ACSIL::s_CustomStudyInformation customStudyInfo;
+    sc.GetCustomStudyInformation(sc.ChartNumber, studyID, customStudyInfo);
+
     std::stringstream reportFileName;
-    reportFileName << config->CustomStudyFileAndFunctionName
+    reportFileName << customStudyInfo.DLLFileName
                    << "-" << comboIndex;
 
-    std::string resultsDir = std::filesystem::path(sc.Input[StudyInputs::ConfigFilePath].GetString()).parent_path().string() + "/results/" + config->CustomStudyFileAndFunctionName + "-" + startDateTimeString + "/";
+    std::string resultsDir = std::filesystem::path(sc.Input[StudyInputs::ConfigFilePath].GetString()).parent_path().string() + "/results/" + customStudyInfo.DLLFileName.GetChars() + "-" + startDateTimeString + "/";
     std::filesystem::create_directories(resultsDir);
     std::string reportPath = resultsDir + reportFileName.str() + ".json";
 
-    logging->LogMetrics(sc, config->CustomStudyFileAndFunctionName, reportPath, params, studyID);
+    logging->LogMetrics(sc, customStudyInfo.DLLFileName.GetChars(), reportPath, params, studyID);
     OnChartLogging::AddLog(sc, "Logged metrics for completed combination.");
 
     replayState = ReplayState::Idle;

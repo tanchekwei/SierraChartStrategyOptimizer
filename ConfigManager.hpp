@@ -43,8 +43,6 @@ struct LogConfig
 
 struct StrategyOptimizerConfig
 {
-    std::string CustomStudyFileAndFunctionName;
-    std::string CustomStudyShortName;
     bool OpenResultsFolder;
     ReplayConfig ReplayConfig;
     std::vector<InputConfig> ParamConfigs;

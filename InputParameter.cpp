@@ -80,25 +80,8 @@ std::string InputParameter::GetParameterValueByStudyId(SCStudyInterfaceRef sc, i
     std::stringstream ss;
     switch (valueType)
     {
-    case OHLC_VALUE:
-    case STUDYINDEX_VALUE:
-    case SUBGRAPHINDEX_VALUE:
-    case MOVAVGTYPE_VALUE:
-    case TIME_PERIOD_LENGTH_UNIT_VALUE:
-    case STUDYID_VALUE:
-    case CANDLESTICK_PATTERNS_VALUE:
-    case CUSTOM_STRING_VALUE:
-    case TIMEZONE_VALUE:
-    case ALERT_SOUND_NUMBER_VALUE:
     case INT_VALUE:
-    case CHART_NUMBER:
     case YESNO_VALUE:
-    case DATE_VALUE:
-    case TIME_VALUE:
-    case DATETIME_VALUE:
-    case CHART_STUDY_SUBGRAPH_VALUES:
-    case STUDY_SUBGRAPH_VALUES:
-    case CHART_STUDY_VALUES:
     {
         int input = 0;
         sc.GetChartStudyInputInt(sc.ChartNumber, studyId, index, input);
@@ -112,15 +95,13 @@ std::string InputParameter::GetParameterValueByStudyId(SCStudyInterfaceRef sc, i
         return std::to_string(input);
     }
     case STRING_VALUE:
-    case PATH_AND_FILE_NAME_VALUE:
-    case FIND_SYMBOL_VALUE:
     {
         SCString input;
         sc.GetChartStudyInputString(sc.ChartNumber, studyId, index, input);
         return input.GetChars();
     }
     default:
-        ss << "";
+        ss << "unsupported type";
         break;
     }
     return ss.str();

@@ -7,8 +7,8 @@
 
 namespace OnChartLogging
 {
-    void AddLog(SCStudyInterfaceRef sc, const SCString& message);
-    void DrawLogs(SCStudyInterfaceRef sc);
+    void AddLog(SCStudyInterfaceRef sc, const SCString& message, const SCString& fontFace = "");
+    void DrawLogs(SCStudyInterfaceRef sc, const SCString& fontFace = "");
     void ClearLogs(SCStudyInterfaceRef sc);
     std::vector<SCString>* GetLogMessagesVector(SCStudyInterfaceRef sc);
 };

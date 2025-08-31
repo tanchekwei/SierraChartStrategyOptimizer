@@ -1,10 +1,9 @@
 {
-    "customStudyFileAndFunctionName": "MyTradingStrategy.scsf_MyTradingStrategy",
-    "customStudyShortName": "MyStrategy",
+    "customStudyFileAndFunctionName": "VolumeSpikeStrategy_250830_2320_release.scsf_VolumeSpikeStrategy",
     "openResultsFolder": true,
     "replayConfig": {
-        "replaySpeed": 888,
-        "startDate": "2024-01-01",
+        "replaySpeed": 15360,
+        "startDate": "2025-08-29",
         "startTime": "00:00:00.000",
         "replayMode": 2,
         "chartsToReplay": 0,
@@ -17,25 +16,84 @@
     },
     "paramConfigs": [
         {
-            "type": "int",
-            "index": 5,
-            "min": 1,
-            "max": 2,
-            "increment": 1
-        },
-        {
-            "type": "float",
-            "index": 6,
-            "min": 1,
-            "max": 2,
-            "increment": 0.5
-        },
-        {
+            "_name": "Enable Trading",
+            "index": 0,
             "type": "bool",
-            "index": 9,
-            "min": 0,
+            "min": 1,
             "max": 1,
+            "increment": 0
+        },
+        {
+            "_name": "Enable Long Trades",
+            "index": 1,
+            "type": "bool",
+            "min": 1,
+            "max": 1,
+            "increment": 0
+        },
+        {
+            "_name": "Enable Short Trades",
+            "index": 2,
+            "type": "bool",
+            "min": 1,
+            "max": 1,
+            "increment": 0
+        },
+        {
+            "_name": "Visualize Signals Only (No Trades)",
+            "index": 3,
+            "type": "bool",
+            "min": 0,
+            "max": 0,
+            "increment": 0
+        },
+        {
+            "_name": "Order Quantity",
+            "index": 4,
+            "type": "int",
+            "min": 1,
+            "max": 1,
+            "increment": 0
+        },
+        {
+            "_name": "Limit Order Offset Ticks",
+            "index": 5,
+            "type": "int",
+            "min": 0,
+            "max": 2,
             "increment": 1
+        },
+        {
+            "_name": "Price Chase Trigger Ticks",
+            "index": 6,
+            "type": "int",
+            "min": 2,
+            "max": 6,
+            "increment": 2
+        },
+        {
+            "_name": "Price Chase Step Ticks",
+            "index": 7,
+            "type": "int",
+            "min": 1,
+            "max": 2,
+            "increment": 1
+        },
+        {
+            "_name": "Target in Ticks",
+            "index": 8,
+            "type": "int",
+            "min": 30,
+            "max": 30,
+            "increment": 0
+        },
+        {
+            "_name": "Stop in Ticks",
+            "index": 9,
+            "type": "int",
+            "min": 30,
+            "max": 30,
+            "increment": 0
         }
     ]
 }

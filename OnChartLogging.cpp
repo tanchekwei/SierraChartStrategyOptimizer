@@ -17,7 +17,7 @@ namespace OnChartLogging
         return logMessages;
     }
 
-    void AddLog(SCStudyInterfaceRef sc, const SCString &message)
+    void AddLog(SCStudyInterfaceRef sc, const SCString &message, const SCString& fontFace)
     {
         int &enableLog = sc.GetPersistentIntFast(PersistentVars::EnableLog);
         if (enableLog == 0)
@@ -25,7 +25,8 @@ namespace OnChartLogging
 
         sc.AddMessageToLog(message, 0);
         auto *logMessages = GetLogMessagesVector(sc);
-        if (logMessages->size() >= 20)
+        int &maxLogLines = sc.GetPersistentIntFast(PersistentVars::MaxLogLines);
+        if (logMessages->size() >= maxLogLines)
         {
             logMessages->erase(logMessages->begin());
         }
@@ -34,11 +35,11 @@ namespace OnChartLogging
         int &enableShowLogOnChart = sc.GetPersistentIntFast(PersistentVars::EnableShowLogOnChart);
         if (enableShowLogOnChart != 0)
         {
-            DrawLogs(sc);
+            DrawLogs(sc, fontFace);
         }
     }
 
-    void DrawLogs(SCStudyInterfaceRef sc)
+    void DrawLogs(SCStudyInterfaceRef sc, const SCString& fontFace)
     {
         int &textDrawingLineNumber = sc.GetPersistentIntFast(PersistentVars::LogDrawingLineNumber);
         auto *logMessages = GetLogMessagesVector(sc);
@@ -77,8 +78,7 @@ namespace OnChartLogging
         tool.Text = logText;
         tool.FontSize = 10;
         tool.TextAlignment = DT_LEFT | DT_TOP;
-        tool.FontFace = sc.GetChartTextFontFaceName();
-
+        tool.FontFace = "Consolas";
         if (sc.UseTool(tool) > 0)
         {
             textDrawingLineNumber = tool.LineNumber;

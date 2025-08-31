@@ -47,12 +47,7 @@ void ReportGenerator::WriteTradesData(SCStudyInterfaceRef sc, std::ofstream& log
 
 void ReportGenerator::WriteTradeStatisticsV2(SCStudyInterfaceRef sc, std::ofstream& log) {
     log << "\n\n--- Trade Statistics V2 ---\n";
-
-    const char* headers[] = {
-        "Statistic", "All Trades", "Long Trades", "Short Trades"
-    };
-
-    log << headers << "," << headers << "," << headers << "," << headers << "\n";
+    log << "Statistic,All Trades,Long Trades,Short Trades\n";
 
     n_ACSIL::s_TradeStatistics allStats, longStats, shortStats;
     sc.GetTradeStatisticsForSymbolV2(n_ACSIL::STATS_TYPE_ALL_TRADES, allStats);

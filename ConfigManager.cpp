@@ -15,14 +15,6 @@ namespace
 {
     void ParseMainSettings(const json &root, StrategyOptimizerConfig &outConfig)
     {
-        if (!root.contains("customStudyFileAndFunctionName"))
-            throw std::runtime_error("Missing required field: 'customStudyFileAndFunctionName'");
-        outConfig.CustomStudyFileAndFunctionName = root["customStudyFileAndFunctionName"].get<std::string>();
-
-        if (!root.contains("customStudyShortName"))
-            throw std::runtime_error("Missing required field: 'customStudyShortName'");
-        outConfig.CustomStudyShortName = root["customStudyShortName"].get<std::string>();
-
         outConfig.OpenResultsFolder = root.value("openResultsFolder", true);
     }
 
@@ -87,6 +79,11 @@ namespace
         {
             for (const auto &input : inputs)
             {
+                if (input.contains("increment") && input["increment"].get<double>() == 0)
+                {
+                    continue;
+                }
+                
                 InputType type = InputType::INT; // Default to INT
                 if (input.contains("type"))
                 {
@@ -149,7 +146,10 @@ namespace ConfigLoader
             OnChartLogging::AddLog(sc, "INFO: Config file parsed successfully. Loading settings...");
 
             ParseMainSettings(root, outConfig);
-            logMessage.Format("INFO:   - Study: %s (%s)", outConfig.CustomStudyFileAndFunctionName.c_str(), outConfig.CustomStudyShortName.c_str());
+            unsigned int studyId = sc.Input[StudyInputs::TargetStudyRef].GetStudyID();
+            n_ACSIL::s_CustomStudyInformation customStudyInfo;
+            sc.GetCustomStudyInformation(sc.ChartNumber, studyId, customStudyInfo);
+            logMessage.Format("INFO:   - Study: %s (%s)", customStudyInfo.DLLFileName.GetChars(), customStudyInfo.StudyOriginalName.GetChars());
             OnChartLogging::AddLog(sc, logMessage);
             logMessage.Format("INFO:   - Open Results Folder: %s", outConfig.OpenResultsFolder ? "true" : "false");
             OnChartLogging::AddLog(sc, logMessage);

@@ -20,6 +20,7 @@
 #include <windows.h>
 #include <fstream>
 #include "nlohmann/json.hpp"
+#include <iomanip>
 
 using json = nlohmann::json;
 
@@ -43,7 +44,7 @@ namespace StrategyOptimizerHelpers
         if (ConfigLoader::LoadConfig(sc, configPath.GetChars(), *config))
         {
             OnChartLogging::AddLog(sc, "Configuration loaded successfully. Generating parameter combinations...");
-            *combinations = CombinationGenerator::Generate(config->ParamConfigs);
+            *combinations = CombinationGenerator::GenerateIterative(config->ParamConfigs);
 
             int &enableLog = sc.GetPersistentIntFast(PersistentVars::EnableLog);
             enableLog = config->LogConfig.EnableLog;
@@ -54,17 +55,15 @@ namespace StrategyOptimizerHelpers
             int &maxLogLines = sc.GetPersistentIntFast(PersistentVars::MaxLogLines);
             maxLogLines = config->LogConfig.MaxLogLines;
 
-            if (combinations->empty())
+            if (combinations->empty() && !config->ParamConfigs.empty())
             {
-                OnChartLogging::AddLog(sc, "No parameter combinations found.");
-                return;
+                 OnChartLogging::AddLog(sc, "No varying parameters found. Generating one combination with fixed values.");
+                 combinations->push_back({}); // Add one empty combination to run once
             }
-            else
-            {
-                msg.Format("Generated %d combinations.", (int)combinations->size());
-                OnChartLogging::AddLog(sc, msg);
-                isConfigLoaded = true;
-            }
+            
+            msg.Format("Generated %d combinations.", (int)combinations->size());
+            OnChartLogging::AddLog(sc, msg);
+            isConfigLoaded = true;
         }
         else
         {
@@ -85,6 +84,7 @@ namespace StrategyOptimizerHelpers
     {
         config->ParamConfigs.clear();
         combinations->clear();
+        OnChartLogging::ClearLogs(sc);
         OnChartLogging::AddLog(sc, "'Verify Config' button clicked.");
         SCString configPath = Input_ConfigFilePath.GetString();
         SCString msg;
@@ -95,7 +95,7 @@ namespace StrategyOptimizerHelpers
         if (ConfigLoader::LoadConfig(sc, configPath.GetChars(), *config))
         {
             OnChartLogging::AddLog(sc, "Configuration loaded successfully. Generating parameter combinations...");
-            *combinations = CombinationGenerator::Generate(config->ParamConfigs);
+            *combinations = CombinationGenerator::GenerateIterative(config->ParamConfigs);
 
             int &enableLog = sc.GetPersistentIntFast(PersistentVars::EnableLog);
             enableLog = config->LogConfig.EnableLog;
@@ -106,17 +106,14 @@ namespace StrategyOptimizerHelpers
             int &maxLogLines = sc.GetPersistentIntFast(PersistentVars::MaxLogLines);
             maxLogLines = config->LogConfig.MaxLogLines;
 
-            if (combinations->empty())
+            if (combinations->empty() && !config->ParamConfigs.empty())
             {
-                OnChartLogging::AddLog(sc, "No parameter combinations found.");
-                return;
+                 combinations->push_back({}); 
             }
-            else
-            {
-                msg.Format("Generated %d combinations.", (int)combinations->size());
-                OnChartLogging::AddLog(sc, msg);
-                isConfigLoaded = true;
-            }
+
+            msg.Format("Generated %d combinations.", (int)combinations->size());
+            OnChartLogging::AddLog(sc, msg);
+            isConfigLoaded = true;
         }
         else
         {
@@ -128,15 +125,54 @@ namespace StrategyOptimizerHelpers
             return;
         }
 
-        OnChartLogging::AddLog(sc, "Configuration verified. Setting study inputs for display.");
-        if (!combinations->empty())
+        OnChartLogging::AddLog(sc, "Configuration verified. Input:");
+        
+        unsigned int studyId = sc.Input[StudyInputs::TargetStudyRef].GetStudyID();
+        if (studyId == 0)
         {
-            ReplayManager::SetStudyInputs(sc, *config, (*combinations)[0]);
+        OnChartLogging::AddLog(sc, "Could not find study to log inputs.");
+        return;
         }
-        else
+
+        const SCString fontFace = "Consolas";
+        std::stringstream header_ss;
+        header_ss << "| " << std::right << std::setw(30) << "Input Name" << "| " << std::left << std::setw(15) << "Value" << "|";
+        OnChartLogging::AddLog(sc, SCString(header_ss.str().c_str()), fontFace);
+        
+        std::stringstream separator_ss;
+        separator_ss << "|" << std::string(31, '-') << "|" << std::string(17, '-') << "|";
+        OnChartLogging::AddLog(sc, SCString(separator_ss.str().c_str()), fontFace);
+
+        const auto& firstCombination = combinations->empty() ? std::vector<double>() : (*combinations)[0];
+        int varyingParamIndex = 0;
+
+        for (const auto& param : config->ParamConfigs)
         {
-            OnChartLogging::AddLog(sc, "No combinations generated, cannot set study inputs.");
+            SCString inputName;
+            sc.GetStudyInputName(sc.ChartNumber, studyId, param.Index, inputName);
+            if (inputName.IsEmpty()) continue;
+
+            double value;
+            if (std::fabs(param.Increment) > 1e-9) 
+            {
+                if (varyingParamIndex < firstCombination.size())
+                {
+                    value = firstCombination[varyingParamIndex];
+                    varyingParamIndex++;
+                }
+                else continue; 
+            }
+            else 
+            {
+                value = param.MinValue;
+            }
+
+            std::stringstream ss;
+            ss << "| " << std::right << std::setw(30) << inputName.GetChars() 
+               << "| " << std::left << std::setw(15) << value << "|";
+            OnChartLogging::AddLog(sc, SCString(ss.str().c_str()), fontFace);
         }
+        
         OnChartLogging::AddLog(sc, "--- Verify config finished. ---");
     }
 
@@ -171,6 +207,7 @@ namespace StrategyOptimizerHelpers
 
     void HandleGenerateConfigEvent(SCStudyInterfaceRef sc)
     {
+        OnChartLogging::ClearLogs(sc);
         OnChartLogging::AddLog(sc, "Generate config button clicked.");
         unsigned int studyId = sc.Input[StudyInputs::TargetStudyRef].GetStudyID();
         if (studyId == 0)
@@ -198,9 +235,7 @@ namespace StrategyOptimizerHelpers
         SCDateTime threeDaysAgo = sc.GetCurrentDateTime().SubtractDays(3);
 
         nlohmann::ordered_json config;
-        sc.SetChartStudyShortName(sc.ChartNumber, studyId, buffer);
-        config["customStudyFileAndFunctionName"] = buffer;
-        config["customStudyShortName"] = buffer;
+        config["_customStudyFileAndFunctionName"] = buffer;
         config["openResultsFolder"] = true;
         config["replayConfig"] = {
             {"replaySpeed", 888},
@@ -268,7 +303,9 @@ namespace StrategyOptimizerHelpers
         }
         config["paramConfigs"] = paramConfigs;
 
-        std::string configPath = std::filesystem::path(sc.Input[StudyInputs::ConfigFilePath].GetString()).parent_path().string() + "/" + buffer + ".json";
+        std::string configDir = std::filesystem::path(sc.Input[StudyInputs::ConfigFilePath].GetString()).parent_path().string() + "/StrategyOptimizerGeneratedConfig/";
+        std::filesystem::create_directories(configDir);
+        std::string configPath = configDir + buffer + ".json";
         std::ofstream o(configPath);
         o << std::setw(4) << config << std::endl;
         o.close();
@@ -276,5 +313,7 @@ namespace StrategyOptimizerHelpers
         SCString msg;
         msg.Format("Configuration file generated at '%s'.", configPath.c_str());
         OnChartLogging::AddLog(sc, msg);
+
+        ShellExecuteA(NULL, "open", configDir.c_str(), NULL, NULL, SW_SHOWNORMAL);
     }
 }
