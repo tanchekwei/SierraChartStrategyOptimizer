@@ -87,7 +87,7 @@ void HandleSetDefaults(SCStudyInterfaceRef sc)
 {
     sc.GraphName = "Strategy Optimizer";
     sc.StudyDescription = "Runs automated backtests of a trading study or strategy across all possible parameter combinations within user-defined ranges.";
-    sc.AutoLoop = 1;
+    sc.AutoLoop = 0;
     sc.GraphRegion = 0;
     sc.MaintainTradeStatisticsAndTradesData = true;
 

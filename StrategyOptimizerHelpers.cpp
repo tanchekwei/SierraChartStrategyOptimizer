@@ -55,10 +55,10 @@ namespace StrategyOptimizerHelpers
             int &maxLogLines = sc.GetPersistentIntFast(PersistentVars::MaxLogLines);
             maxLogLines = config->LogConfig.MaxLogLines;
 
-            if (combinations->empty() && !config->ParamConfigs.empty())
+            if (combinations->empty() && config->ParamConfigs.empty())
             {
-                 OnChartLogging::AddLog(sc, "No varying parameters found. Generating one combination with fixed values.");
-                 combinations->push_back({}); // Add one empty combination to run once
+                OnChartLogging::AddLog(sc, "No varying parameters found.");
+                return;
             }
             
             msg.Format("Generated %d combinations.", (int)combinations->size());
@@ -140,7 +140,7 @@ namespace StrategyOptimizerHelpers
         OnChartLogging::AddLog(sc, SCString(header_ss.str().c_str()), fontFace);
         
         std::stringstream separator_ss;
-        separator_ss << "|" << std::string(31, '-') << "|" << std::string(17, '-') << "|";
+        separator_ss << "|" << std::string(31, '-') << "|" << std::string(16, '-') << "|";
         OnChartLogging::AddLog(sc, SCString(separator_ss.str().c_str()), fontFace);
 
         const auto& firstCombination = combinations->empty() ? std::vector<double>() : (*combinations)[0];

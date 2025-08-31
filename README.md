@@ -22,7 +22,7 @@ After all combinations have been tested, the optimizer generated JSON files and 
 The "Reset / Stop" button allows you to clear the current state and stop the optimization process entirely.
 
 [<video controls src="images/2025-08-27 05-33-51-1.mp4" title=""></video>
-](https://github.com/user-attachments/assets/fb0005f0-b4c7-4264-9b12-fdf3115ef22b)
+](https://github.com/user-attachments/assets/39058e51-d398-479b-85dd-c1b960acd997)
 
 ## Quick Start Guide
 
@@ -59,6 +59,7 @@ The "Reset / Stop" button allows you to clear the current state and stop the opt
 6.  **Generate Configuration**:
     *   Click the **CS6** (Generate) button on your control bar.
     *   This will create a new JSON configuration file in the `StrategyOptimizerGeneratedConfig` folder inside your Sierra Chart `Data` directory.
+    *   Rename and move the file to the path `C:\SierraChart\Data\StrategyOptimizerConfig.json` (configurable in the setting)
 7.  **Verify Configuration**:
     *   Before running a full optimization, click the **CS7** (Verify Config) button on your control bar.
     *   Check the on-chart log to ensure that your configuration is loaded correctly and the inputs are displayed as expected.
