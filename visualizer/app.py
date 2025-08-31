@@ -1,5 +1,5 @@
-// Copyright (c) 2025 Chek Wei Tan
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+# Copyright (c) 2025 Chek Wei Tan
+# Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 import streamlit as st
 import pandas as pd
