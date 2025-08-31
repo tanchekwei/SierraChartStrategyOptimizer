@@ -1,5 +1,8 @@
 # Sierra Chart ACSIL Strategy Optimizer
-![alt text](images/Report.png)
+
+[<video controls src="images/2025-08-27 05-33-51-1.mp4" title=""></video>
+](https://github.com/user-attachments/assets/fef409f5-4ce2-4d70-97f1-d08cb7c5cca2)
+
 ## Features
 
 -   **Automated Backtesting**: Executes your trading strategy across all possible parameter combinations within user-defined ranges.
@@ -20,10 +23,6 @@ When you click the "Start" button, the optimizer generates all possible paramete
 After all combinations have been tested, the optimizer generated JSON files and creates a summary CSV report, with the results sorted by total profit/loss.
 
 The "Reset / Stop" button allows you to clear the current state and stop the optimization process entirely.
-
-[<video controls src="images/2025-08-27 05-33-51-1.mp4" title=""></video>
-](https://github.com/user-attachments/assets/39058e51-d398-479b-85dd-c1b960acd997)
-
 ## Quick Start Guide
 
 ### Prerequisites
@@ -42,7 +41,7 @@ The "Reset / Stop" button allows you to clear the current state and stop the opt
     *   Find and select **Strategy Optimizer** from the list and click **Add**.
 4.  **Configure the Optimizer Study**:
     *   In the **Chart Studies** window, select the **Strategy Optimizer** study and go to its **Settings**.
-    *   Select the study you want to optimize from the **Target Study** dropdown list.
+    *   Select the study you want to optimize from the **Target Study** dropdown list (there are 2 dropdown lists, but only the first dropdown list required to select).
 5.  **Add Control Bar Buttons**:
     *   Right-click on a control bar in Sierra Chart (e.g., Control Bar 1).
     *   Select **Customize Control Bar...**.
@@ -56,12 +55,13 @@ The "Reset / Stop" button allows you to clear the current state and stop the opt
 
 6.  **Generate Configuration**:
     *   Click the **CS6** (Generate) button on your control bar.
-    *   This will create a new JSON configuration file in the `StrategyOptimizerGeneratedConfig` folder inside your Sierra Chart `Data` directory.
-    *   Rename and move the file to the path `C:\SierraChart\Data\StrategyOptimizerConfig.json` (configurable in the setting)
-7.  **Verify Configuration**:
+    *   Folder of the generated JSON file will be open in explorer, proceed to copy the file path.
+    *   Paste the copied path into the **Config File Path** input in the Strategy Optimizer settings.
+7.  **Update configuration file**: Refer to [JSON Configuration section](#json-configuration), update the configuration file according to your need.
+8.  **Verify Configuration**:
     *   Before running a full optimization, click the **CS7** (Verify Config) button on your control bar.
     *   Check the on-chart log to ensure that your configuration is loaded correctly and the inputs are displayed as expected.
-8.  **Run the Optimization**:
+9.  **Run the Optimization**:
     *   Click the **CS8** (Start) button on your control bar to begin the optimization process.
 
 ## Stopping the Optimization Process
@@ -102,8 +102,8 @@ To stop the optimization process entirely, you must use the **Reset / Stop** but
 | Property    | Type   | Description                                                                                                |
 | ----------- | ------ | ---------------------------------------------------------------------------------------------------------- |
 | `_name`     | string | **For display purposes only.** The name of the input as it appears in the study's settings.                  |
-| `index`     | number | The zero-based index of the study input.                                                                   |
-| `type`      | string | The data type of the input. Possible values: `int`, `float`, `bool`.                                       |
+| `index`     | number | The zero-based index of the study input. (generated via Generate button, do not update)                                                                  |
+| `type`      | string | The data type of the input. Possible values: `int`, `float`, `bool`. (generated via Generate button, do not update)                                      |
 | `min`       | number | The minimum value to be tested for this parameter.                                                         |
 | `max`       | number | The maximum value to be tested for this parameter.                                                         |
 | `increment` | number | The amount to increment the value between `min` and `max`. If `0`, the parameter will be fixed at `min`. |
