@@ -84,7 +84,7 @@ Here is an example of a configuration file.
     "customStudyShortName": "test",
     "openResultsFolder": true,
     "replayConfig": {
-        "replaySpeed": 480,
+        "replaySpeed": 888,
         "startDate": "2025-08-20",
         "startTime": "12:00:00.000",
         "replayMode": 2,
@@ -126,7 +126,7 @@ Here is an example of a configuration file.
 -   **`customStudyShortName`**: A short name for the study. This is required for the optimizer to get the study ID.
 -   **`openResultsFolder`**: (Optional) Set to `true` to automatically open the results folder after the optimization is complete. Defaults to `true`.
 -   **`replayConfig`**: An object containing replay settings.
-    -   **`replaySpeed`**: The replay speed. Possible values: `1, 2, 5, 10, 15, 30, 60, 120, 240, 480, 960, 1920, 3840, 7680, 15360, 30720`.
+    -   **`replaySpeed`**: The replay speed.
     -   **`startDate`**: The replay start date.
     -   **`startTime`**: The replay start time.
     -   **`replayMode`**: The replay mode. Possible values: `1` (Standard), `2` (Accurate Trading System Back Test), `3` (Calculate at Every Tick), `4` (Calculate Same as Real-Time).

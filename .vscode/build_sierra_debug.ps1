@@ -36,6 +36,8 @@ $extraSources = @(
     'ConfigManager.cpp'
     'StrategyOptimizerHelpers.cpp'
     'CombinationGenerator.cpp'
+    'InputParameter.cpp'
+    'ReportGenerator.cpp'
 )
 
 # Join into a single space-separated string
@@ -43,6 +45,6 @@ $extra = $extraSources -join ' '
 
 # Write batch file
 Set-Content $bat "call `"$VCVarsPath`" amd64"
-Add-Content $bat "cl /JMC /MP /analyze- /Zc:wchar_t /Z7 /Od /GS /W3 /RTC1 /Zc:inline /D `"_WINDOWS`" /D `"_USRDLL`" /D `"_WINDLL`" /Gd /Gy /GR- /GF /fp:precise /MTd /std:c++17 /LD /EHa /WX- /diagnostics:classic /nologo /I `"E:\boost_1_89_0`" `"$SourceFile`" $extra /link `"Gdi32.lib`" `"User32.lib`" `"Shell32.lib`" /DLL /DYNAMICBASE /DEBUG /INCREMENTAL:NO /OPT:REF /MACHINE:X64 /OUT:`"$OutDir\$baseName`_$ts`_debug.dll`""
+Add-Content $bat "cl /JMC /MP /analyze- /Zc:wchar_t /Z7 /Od /GS /W3 /RTC1 /Zc:inline /D `"_WINDOWS`" /D `"_USRDLL`" /D `"_WINDLL`" /Gd /Gy /GR- /GF /fp:precise /MTd /std:c++17 /LD /EHa /WX- /diagnostics:classic /nologo `"$SourceFile`" $extra /link `"Gdi32.lib`" `"User32.lib`" `"Shell32.lib`" /DLL /DYNAMICBASE /DEBUG /INCREMENTAL:NO /OPT:REF /MACHINE:X64 /OUT:`"$OutDir\$baseName`_$ts`_debug.dll`""
 
 & $bat

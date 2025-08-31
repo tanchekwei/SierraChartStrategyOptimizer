@@ -1,229 +1,28 @@
-// Copyright (c) 2025 Chek Wei Tan
-// Licensed under the MIT License. See LICENSE file in the project root for full license information.
-
-#include "Logging.hpp"
-#include <fstream>
+#include "ReportGenerator.hpp"
 #include <sstream>
-#include <filesystem>
-#include <numeric>
-#include <cmath>
-#include <chrono>
-#include <iomanip>
-#include "nlohmann/json.hpp"
 
-using json = nlohmann::json;
-
-Logging::Logging(SCStudyInterfaceRef sc) : sc(sc) {}
-
-void Logging::LogMetrics(SCStudyInterfaceRef sc, const std::string &strategyName, const std::string &reportPath, const std::vector<std::pair<std::string, double>> &params, int studyId)
-{
-    std::filesystem::create_directories(std::filesystem::path(reportPath).parent_path());
-
-    std::ofstream log(reportPath, std::ios::app);
-    if (!log.is_open())
-        return;
-
-    json result;
-    result["customStudyInformation"] = GetCustomStudyInformation(sc, studyId);
-    result["combination"] = GetCombination(params);
-    result["studyParameters"] = GetStudyParameters(sc, studyId);
-    result["tradesData"] = GetTradesData(sc);
-    result["tradeStatistics"] = GetTradeStatistics(sc);
-
-    log << result.dump(4);
-
-    // csv
-    std::stringstream fileNameStream;
-    fileNameStream
-        << reportPath << ".csv";
-
-    std::ofstream csvLog(fileNameStream.str(), std::ios::app);
-    if (!csvLog.is_open())
-        return;
-
-    WriteSummaryHeader(csvLog, strategyName, getCurrentDllName(sc, studyId), params);
-    Logging::WriteTradesData(sc, csvLog);
-    Logging::WriteTradeStatisticsV2(sc, csvLog);
-    // csv
-}
-
-std::string Logging::getCurrentDllName(SCStudyInterfaceRef sc, int studyId)
-{
-    n_ACSIL::s_CustomStudyInformation CustomStudyInformation;
-    if (sc.GetCustomStudyInformation(sc.ChartNumber, studyId, CustomStudyInformation) > 0)
-    {
-        std::string fullPath(CustomStudyInformation.DLLFileName.GetChars());
-        size_t pos = fullPath.find_last_of("\\/");
-        if (pos != std::string::npos)
-            return fullPath.substr(pos + 1);
-        return fullPath;
-    }
-    return "UnknownDll";
-}
-
-std::string Logging::GetParameterValueAsString(const SCInputRef &Input)
-{
-    std::stringstream ss;
-    switch (Input.ValueType)
-    {
-    case OHLC_VALUE:
-    case STUDYINDEX_VALUE:
-    case SUBGRAPHINDEX_VALUE:
-    case MOVAVGTYPE_VALUE:
-    case TIME_PERIOD_LENGTH_UNIT_VALUE:
-    case STUDYID_VALUE:
-    case CANDLESTICK_PATTERNS_VALUE:
-    case CUSTOM_STRING_VALUE:
-    case TIMEZONE_VALUE:
-    case ALERT_SOUND_NUMBER_VALUE:
-        ss << Input.GetIndex();
-    case INT_VALUE:
-    case CHART_NUMBER:
-        ss << Input.GetInt();
-        break;
-    case FLOAT_VALUE:
-        ss << Input.GetFloat();
-        break;
-    case YESNO_VALUE:
-        ss << (Input.GetYesNo() ? "Yes" : "No");
-        break;
-    case DATE_VALUE:
-        ss << SCDateTime(Input.DateTimeValue).GetDate();
-        break;
-    case TIME_VALUE:
-    {
-        int totalSeconds = SCDateTime(Input.DateTimeValue).GetTimeInSeconds();
-        int hours = totalSeconds / 3600;
-        int minutes = (totalSeconds % 3600) / 60;
-        int seconds = totalSeconds % 60;
-
-        std::ostringstream oss;
-        oss << std::setw(2) << std::setfill('0') << hours << ":"
-            << std::setw(2) << std::setfill('0') << minutes << ":"
-            << std::setw(2) << std::setfill('0') << seconds;
-
-        ss << oss.str();
-    }
-    break;
-    case DATETIME_VALUE:
-        ss << Input.DateTimeValue;
-        break;
-    case COLOR_VALUE:
-        ss << Input.GetColor();
-        break;
-    case DOUBLE_VALUE:
-        ss << Input.GetDouble();
-        break;
-    case STRING_VALUE:
-    case PATH_AND_FILE_NAME_VALUE:
-    case FIND_SYMBOL_VALUE:
-        ss << Input.GetString();
-        break;
-    case CHART_STUDY_SUBGRAPH_VALUES:
-    case STUDY_SUBGRAPH_VALUES:
-    case CHART_STUDY_VALUES:
-        ss << "ChartNumber=" << Input.ChartStudySubgraphValues.ChartNumber
-           << "|StudyID=" << Input.ChartStudySubgraphValues.StudyID
-           << "|SubgraphIndex=" << Input.ChartStudySubgraphValues.SubgraphIndex;
-        break;
-    default:
-        ss << "";
-        break;
-    }
-    return ss.str();
-}
-namespace
-{
-    std::string GetParameterValueByStudyId(SCStudyInterfaceRef sc, int studyId, int index, int valueType)
-    {
-        std::stringstream ss;
-        switch (valueType)
-        {
-        case OHLC_VALUE:
-        case STUDYINDEX_VALUE:
-        case SUBGRAPHINDEX_VALUE:
-        case MOVAVGTYPE_VALUE:
-        case TIME_PERIOD_LENGTH_UNIT_VALUE:
-        case STUDYID_VALUE:
-        case CANDLESTICK_PATTERNS_VALUE:
-        case CUSTOM_STRING_VALUE:
-        case TIMEZONE_VALUE:
-        case ALERT_SOUND_NUMBER_VALUE:
-        case INT_VALUE:
-        case CHART_NUMBER:
-        case YESNO_VALUE:
-        case DATE_VALUE:
-        case TIME_VALUE:
-        case DATETIME_VALUE:
-        case CHART_STUDY_SUBGRAPH_VALUES:
-        case STUDY_SUBGRAPH_VALUES:
-        case CHART_STUDY_VALUES:
-        {
-            int input = 0;
-            sc.GetChartStudyInputInt(sc.ChartNumber, studyId, index, input);
-            return std::to_string(input);
-        }
-        case FLOAT_VALUE:
-        case DOUBLE_VALUE:
-        {
-            double input = 0;
-            sc.GetChartStudyInputFloat(sc.ChartNumber, studyId, index, input);
-            return std::to_string(input);
-        }
-        break;
-        case STRING_VALUE:
-        case PATH_AND_FILE_NAME_VALUE:
-        case FIND_SYMBOL_VALUE:
-        {
-            SCString input;
-            sc.GetChartStudyInputString(sc.ChartNumber, studyId, index, input);
-            return input.GetChars();
-        }
-        default:
-            ss << "";
-            break;
-        }
-        return ss.str();
-    }
-}
-std::vector<std::pair<std::string, std::string>> Logging::GetParameters(int lastInputIndex)
-{
-    std::vector<std::pair<std::string, std::string>> params;
-    for (int i = 0; i <= lastInputIndex; i++)
-    {
-        params.emplace_back(sc.Input[i].Name.GetChars(), GetParameterValueAsString(sc.Input[i]));
-    }
-    return params;
-}
-
-void Logging::WriteSummaryHeader(std::ofstream &log, const std::string &strategyName, const std::string &dllName, const std::vector<std::pair<std::string, double>> &params)
-{
+void ReportGenerator::WriteSummaryHeader(std::ofstream& log, const std::string& strategyName, const std::string& dllName, const std::vector<std::pair<std::string, double>>& params) {
     log << "Strategy,DLL Name,";
-    for (const auto &p : params)
-    {
+    for (const auto& p : params) {
         log << p.first << ",";
     }
     log << "\n"
         << strategyName << "," << dllName << ",";
-    for (const auto &p : params)
-    {
+    for (const auto& p : params) {
         log << p.second << ",";
     }
     log << "\n\n";
 }
 
-void Logging::WriteTradesData(SCStudyInterfaceRef sc, std::ofstream &log)
-{
+void ReportGenerator::WriteTradesData(SCStudyInterfaceRef sc, std::ofstream& log) {
     log << "\n";
     log << "OpenDateTime,CloseDateTime,TradeType,TradeQuantity,MaxClosedQuantity,MaxOpenQuantity,EntryPrice,ExitPrice,TradeProfitLoss,MaximumOpenPositionLoss,MaximumOpenPositionProfit,FlatToFlatMaximumOpenPositionProfit,FlatToFlatMaximumOpenPositionLoss,Commission,IsTradeClosed,Note\n";
 
     int tradeListSize = sc.GetTradeListSize();
-    for (int i = 0; i < tradeListSize; ++i)
-    {
+    for (int i = 0; i < tradeListSize; ++i) {
         s_ACSTrade trade;
         sc.GetTradeListEntry(i, trade);
-        if (trade.IsTradeClosed)
-        {
+        if (trade.IsTradeClosed) {
             std::stringstream ss;
             ss << sc.DateTimeToString(trade.OpenDateTime, FLAG_DT_COMPLETE_DATETIME)
                << "," << sc.DateTimeToString(trade.CloseDateTime, FLAG_DT_COMPLETE_DATETIME)
@@ -246,12 +45,12 @@ void Logging::WriteTradesData(SCStudyInterfaceRef sc, std::ofstream &log)
     }
 }
 
-void Logging::WriteTradeStatisticsV2(SCStudyInterfaceRef sc, std::ofstream &log)
-{
+void ReportGenerator::WriteTradeStatisticsV2(SCStudyInterfaceRef sc, std::ofstream& log) {
     log << "\n\n--- Trade Statistics V2 ---\n";
 
-    const char *headers[] = {
-        "Statistic", "All Trades", "Long Trades", "Short Trades"};
+    const char* headers[] = {
+        "Statistic", "All Trades", "Long Trades", "Short Trades"
+    };
 
     log << headers << "," << headers << "," << headers << "," << headers << "\n";
 
@@ -342,62 +141,13 @@ void Logging::WriteTradeStatisticsV2(SCStudyInterfaceRef sc, std::ofstream &log)
     log << "ClosedFlatToFlatTradesProfitLoss," << allStats.ClosedFlatToFlatTradesProfitLoss << "," << longStats.ClosedFlatToFlatTradesProfitLoss << "," << shortStats.ClosedFlatToFlatTradesProfitLoss << "\n";
 }
 
-json Logging::GetCustomStudyInformation(SCStudyInterfaceRef sc, int studyId)
-{
-    json customStudyInformation;
-    n_ACSIL::s_CustomStudyInformation CustomStudyInformation;
-    if (sc.GetCustomStudyInformation(sc.ChartNumber, studyId, CustomStudyInformation) > 0)
-    {
-        customStudyInformation["DLLFilePath"] = CustomStudyInformation.DLLFilePath;
-        customStudyInformation["DLLFileName"] = CustomStudyInformation.DLLFileName;
-        customStudyInformation["DLLFunctionName"] = CustomStudyInformation.DLLFunctionName;
-        customStudyInformation["StudyOriginalName"] = CustomStudyInformation.StudyOriginalName;
-    }
-    return customStudyInformation;
-}
-
-json Logging::GetCombination(const std::vector<std::pair<std::string, double>> &params)
-{
-    json combination;
-    for (const auto &p : params)
-    {
-        combination[p.first] = p.second;
-    }
-    return combination;
-}
-
-json Logging::GetStudyParameters(SCStudyInterfaceRef sc, int studyId)
-{
-    json studyParameters;
-    bool isContinue = true;
-    int index = 0;
-    while (isContinue)
-    {
-        SCString inputName;
-        sc.GetStudyInputName(sc.ChartNumber, studyId, index, inputName);
-        if (inputName.GetChars() == "" || inputName.GetChars() == nullptr)
-        {
-            isContinue = false;
-            break;
-        }
-        int type = sc.GetChartStudyInputType(sc.ChartNumber, studyId, index);
-        std::string value = GetParameterValueByStudyId(sc, studyId, index, type);
-        studyParameters[inputName.GetChars()] = value;
-        index++;
-    }
-    return studyParameters;
-}
-
-json Logging::GetTradesData(SCStudyInterfaceRef sc)
-{
+json ReportGenerator::GetTradesData(SCStudyInterfaceRef sc) {
     json tradesData = json::array();
     int tradeListSize = sc.GetTradeListSize();
-    for (int i = 0; i < tradeListSize; ++i)
-    {
+    for (int i = 0; i < tradeListSize; ++i) {
         s_ACSTrade trade;
         sc.GetTradeListEntry(i, trade);
-        if (trade.IsTradeClosed)
-        {
+        if (trade.IsTradeClosed) {
             json tradeData;
             tradeData["OpenDateTime"] = sc.DateTimeToString(trade.OpenDateTime, FLAG_DT_COMPLETE_DATETIME).GetChars();
             tradeData["CloseDateTime"] = sc.DateTimeToString(trade.CloseDateTime, FLAG_DT_COMPLETE_DATETIME).GetChars();
@@ -422,10 +172,8 @@ json Logging::GetTradesData(SCStudyInterfaceRef sc)
 }
 
 template <typename T>
-nlohmann::json MakeTradeStats(SCStudyInterfaceRef sc, const T &stats)
-{
+nlohmann::json MakeTradeStats(SCStudyInterfaceRef sc, const T& stats) {
     return {
-        {"ClosedTradesProfitLoss", stats.ClosedTradesProfitLoss},
         {"ClosedTradesProfitLoss", stats.ClosedTradesProfitLoss},
         {"ClosedTradesTotalProfit", stats.ClosedTradesTotalProfit},
         {"ClosedTradesTotalLoss", stats.ClosedTradesTotalLoss},
@@ -505,11 +253,11 @@ nlohmann::json MakeTradeStats(SCStudyInterfaceRef sc, const T &stats)
         {"LastExitDateTime", sc.DateTimeToString(stats.LastExitDateTime, FLAG_DT_COMPLETE_DATETIME).GetChars()},
         {"TotalBuyQuantity", stats.TotalBuyQuantity},
         {"TotalSellQuantity", stats.TotalSellQuantity},
-        {"ClosedFlatToFlatTradesProfitLoss", stats.ClosedFlatToFlatTradesProfitLoss}};
+        {"ClosedFlatToFlatTradesProfitLoss", stats.ClosedFlatToFlatTradesProfitLoss}
+    };
 }
 
-json Logging::GetTradeStatistics(SCStudyInterfaceRef sc)
-{
+json ReportGenerator::GetTradeStatistics(SCStudyInterfaceRef sc) {
     json tradeStatistics;
     n_ACSIL::s_TradeStatistics allStats, longStats, shortStats;
     sc.GetTradeStatisticsForSymbolV2(n_ACSIL::STATS_TYPE_ALL_TRADES, allStats);
@@ -519,4 +267,12 @@ json Logging::GetTradeStatistics(SCStudyInterfaceRef sc)
     tradeStatistics["Long Trades"] = MakeTradeStats(sc, longStats);
     tradeStatistics["Short Trades"] = MakeTradeStats(sc, shortStats);
     return tradeStatistics;
+}
+
+json ReportGenerator::GetCombination(const std::vector<std::pair<std::string, double>>& params) {
+    json combination;
+    for (const auto& p : params) {
+        combination[p.first] = p.second;
+    }
+    return combination;
 }
