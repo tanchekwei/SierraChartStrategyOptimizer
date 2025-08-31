@@ -25,9 +25,11 @@ Once the requirements are installed, you can run the Streamlit application.
 
 ```bash
 streamlit run app.py
-```d
+```
+
 
 The application will open in your default web browser.
+
 
 ### 3. Analyze Your Data
 
