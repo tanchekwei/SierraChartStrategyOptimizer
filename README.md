@@ -108,10 +108,6 @@ To stop the optimization process entirely, you must use the **Reset / Stop** but
 | `max`       | number | The maximum value to be tested for this parameter.                                                         |
 | `increment` | number | The amount to increment the value between `min` and `max`. If `0`, the parameter will be fixed at `min`. |
 
-## Support the Project
-
-If you find this Strategy Optimizer useful, please consider giving the repository a star on GitHub! Your support helps in maintaining and improving this tool.
-
 ## Results and Reports
 
 After the optimization process completes, the optimizer generates a set of report files. If `openResultsFolder` is set to `true` in your configuration, the folder containing these reports will open automatically.
@@ -131,6 +127,10 @@ The `summary.csv` file provides a high-level overview of all the backtest runs, 
 ### Detailed Run Data
 -   **A `.json` file**: Contains detailed trade-by-trade data, including entry/exit times, prices, and profit/loss for each trade. This file is useful for in-depth analysis.
 -   **A `.csv` file**: A CSV representation of the trade data for easy viewing.
+
+## ⭐ Support the Project
+
+If you find this Strategy Optimizer useful, please consider giving the repository a star on GitHub! Your support helps in maintaining and improving this tool. Thank you for helping this project grow! 🚀
 
 ## Disclaimer
 
