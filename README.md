@@ -32,7 +32,7 @@ The "Reset / Stop" button allows you to clear the current state and stop the opt
 
 ### Steps
 
-1.  **Download DLL**: Download the compiled DLL file for this study, or compile it yourself.
+1.  **Download DLL**: Download the compiled DLL file for this study, or [compile it yourself](BUILDING.md).
 2.  **Install DLL**: Place the downloaded DLL file into your Sierra Chart `Data` directory (usually `C:\SierraChart\Data`).
 3.  **Add the Optimizer Study**:
     *   In Sierra Chart, open the chart where your strategy is applied.

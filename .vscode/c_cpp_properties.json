@@ -4,8 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/SierraChart/ACS_Source",
-                "E:/boost_1_89_0"
+                "C:/SierraChart/ACS_Source"
             ],
             "defines": [],
             "windowsSdkVersion": "10.0.19041.0",
