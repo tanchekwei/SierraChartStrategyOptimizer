@@ -113,7 +113,7 @@ namespace CombinationGenerator
             }
             combinations.push_back(currentCombination);
 
-            int k = varyingParams.size() - 1;
+            size_t k = varyingParams.size() - 1;
             while (k >= 0)
             {
                 p_indices[k]++;
