@@ -50,7 +50,7 @@ namespace ReplayManager
         ReplayParameters.ClearExistingTradeSimulationDataForSymbolAndTradeAccount = replayConfig.ClearExistingTradeSimulationDataForSymbolAndTradeAccount;
 
         OnChartLogging::AddLog(sc, "Starting new chart replay...");
-        if (sc.StartChartReplay(sc.ChartNumber, ReplayParameters.ReplaySpeed, ReplayParameters.StartDateTime) == 0)
+        if (sc.StartChartReplayNew(ReplayParameters) == 0)
         {
             OnChartLogging::AddLog(sc, "Chart replay start FAILED.");
         }
