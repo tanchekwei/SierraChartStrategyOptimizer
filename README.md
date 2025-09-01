@@ -106,7 +106,7 @@ To stop the optimization process entirely, you must use the **Reset / Stop** but
 | `type`      | string | The data type of the input. Possible values: `int`, `float`, `bool`. (generated via Generate button, do not update)                                      |
 | `min`       | number | The minimum value to be tested for this parameter.                                                         |
 | `max`       | number | The maximum value to be tested for this parameter.                                                         |
-| `increment` | number | The amount to increment the value between `min` and `max`. If `0`, the parameter will be fixed at `min`. |
+| `increment` | number | The amount to increment the value between `min` and `max`. **If `0`, the parameter be ignored, please fixed the parameter manually.** |
 
 ## Results and Reports
 
