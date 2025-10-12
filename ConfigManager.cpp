@@ -48,6 +48,10 @@ namespace
             throw std::runtime_error("Missing required field in 'replayConfig': 'clearExistingTradeSimulationDataForSymbolAndTradeAccount'");
         outConfig.ReplayConfig.ClearExistingTradeSimulationDataForSymbolAndTradeAccount = replayParams["clearExistingTradeSimulationDataForSymbolAndTradeAccount"].get<int>();
 
+        if (!replayParams.contains("skipEmptyPeriods"))
+            throw std::runtime_error("Missing required field in 'replayConfig': 'skipEmptyPeriods'");
+        outConfig.ReplayConfig.SkipEmptyPeriods = replayParams["skipEmptyPeriods"].get<int>();
+
         SCDateTimeMS DateValue = sc.DateStringToSCDateTime(outConfig.ReplayConfig.StartDate);
         SCDateTimeMS TimeValue = sc.TimeStringToSCDateTime(outConfig.ReplayConfig.StartTime);
         outConfig.ReplayConfig.StartDateTime = DateValue + TimeValue;

@@ -48,6 +48,7 @@ namespace ReplayManager
         ReplayParameters.ReplayMode = static_cast<n_ACSIL::ChartReplayModeEnum>(replayConfig.ReplayMode);
         ReplayParameters.ChartsToReplay = static_cast<n_ACSIL::ChartsToReplayEnum>(replayConfig.ChartsToReplay);
         ReplayParameters.ClearExistingTradeSimulationDataForSymbolAndTradeAccount = replayConfig.ClearExistingTradeSimulationDataForSymbolAndTradeAccount;
+        ReplayParameters.SkipEmptyPeriods = replayConfig.SkipEmptyPeriods;
 
         OnChartLogging::AddLog(sc, "Starting new chart replay...");
         if (sc.StartChartReplayNew(ReplayParameters) == 0)
