@@ -32,6 +32,7 @@ struct ReplayConfig
     int ReplayMode;
     int ChartsToReplay;
     int ClearExistingTradeSimulationDataForSymbolAndTradeAccount;
+    int SkipEmptyPeriods;
 };
 
 struct LogConfig
@@ -51,5 +52,5 @@ struct StrategyOptimizerConfig
 
 namespace ConfigLoader
 {
-    bool LoadConfig(SCStudyInterfaceRef sc, const std::string &filePath, StrategyOptimizerConfig& outConfig);
+    bool LoadConfig(SCStudyInterfaceRef sc, const std::string &filePath, StrategyOptimizerConfig &outConfig);
 }

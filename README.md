@@ -88,6 +88,8 @@ To stop the optimization process entirely, you must use the **Reset / Stop** but
 | `replayMode`                                  | number  | The replay mode. Possible values: `1` (Standard), `2` (Accurate Trading System Back Test), `3` (Calculate at Every Tick), `4` (Calculate Same as Real-Time).                 |
 | `chartsToReplay`                              | number  | The charts to replay. Possible values: `0` (Single Chart), `1` (All Charts in Chartbook), `2` (Charts with Same Link Number).                                               |
 | `clearExistingTradeSimulationDataForSymbolAndTradeAccount` | number  | If set to `1`, any existing trade simulation data for the symbol and trade account will be cleared before the replay starts.                                        |
+| `skipEmptyPeriods`                            | number  | If set to `1`, tells the replay engine to skip empty or inactive periods automatically during replay.                                                                      |
+
 
 ### `logConfig`
 
